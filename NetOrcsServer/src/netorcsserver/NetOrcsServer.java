@@ -8,7 +8,6 @@ package netorcsserver;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 
@@ -18,7 +17,7 @@ import java.util.List;
  */
 class NetOrcsServer {
     int port;
-    List<ConnectionHandler> handlers;
+    List<ConnectionHandler> handlers = new ArrayList<ConnectionHandler>();
     ServerSocket server;
     HashSet<String> users = new HashSet<String>();
 
@@ -37,7 +36,7 @@ class NetOrcsServer {
 			while(true) {
 				try {
 					Socket client = this.server.accept();
-
+                                        System.out.println("New Client Connected");
 					ConnectionHandler handler = new ConnectionHandler(this, client);
 					this.handlers.add(handler);
 
@@ -49,6 +48,10 @@ class NetOrcsServer {
 				}
 			}
 		}
+    }
+
+    void removeHandler(ConnectionHandler handler) {
+        handlers.remove(handler);
     }
     
 }

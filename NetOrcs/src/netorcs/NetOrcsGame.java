@@ -32,7 +32,7 @@ public class NetOrcsGame extends JFrame implements KeyListener{
 
     @Override
     public void keyTyped(KeyEvent e) {
-        
+        connection.sendAction("" + e.getKeyChar());
     }
 
     @Override
