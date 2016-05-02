@@ -19,7 +19,7 @@ import javax.swing.JTextField;
  * @author mcnelljd
  */
 public class NetOrcsStartFrame extends JFrame {
-    
+
     public NetOrcsStartFrame() {
         setTitle("Net Orcs");
         setSize(250, 100);
@@ -43,16 +43,16 @@ public class NetOrcsStartFrame extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 NetOrcsConnection conn = new NetOrcsConnection(ip.getText(), prt.getText());
                 boolean success = conn.connect();
-                if (success){
+                if (success) {
                     setVisible(false);
                     dispose();
                     NetOrcsGame game = new NetOrcsGame(conn);
-                }else{
+                } else {
                     NetOrcsErrorFrame error = new NetOrcsErrorFrame();
                 }
             }
         };
-        
+
         button.addActionListener(start);
     }
 }

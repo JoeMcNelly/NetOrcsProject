@@ -19,41 +19,47 @@ import java.util.logging.Logger;
  *
  * @author mcnelljd
  */
-class ConnectionHandler implements Runnable{
+class ConnectionHandler implements Runnable {
+
     ObjectOutputStream out;
     ObjectInputStream in;
     NetOrcsServer server;
     Socket socket;
-    ConnectionHandler(NetOrcsServer server, Socket socket) throws IOException {
+    String user;
+
+    ConnectionHandler(NetOrcsServer server, Socket socket, String user) throws IOException {
         out = new ObjectOutputStream(socket.getOutputStream());
         out.flush();
         in = new ObjectInputStream(socket.getInputStream());
-        this.server=server;
-        this.socket=socket;
+        this.server = server;
+        this.socket = socket;
+        this.user = user;
     }
 
     @Override
     public void run() {
-        while (true){
-            
-                System.out.println("Waiting to receive...");
-                String input;
+        while (true) {
+
+            String input;
             try {
-                input = (String)in.readObject();
-                System.out.println("Server Recieved: "+input);
-                out.writeObject("XXX_"+input + "_XXX");
+                input = (String) in.readObject();
+                System.out.println("Server Recieved: " + input + " from user: " + user);
+                server.handleAction(this, input);
             } catch (Exception ex) {
-                System.out.println("Connection Error, closing connection to client");
-                    try {
-                        socket.close();
-                        server.removeHandler(this);
-                    } catch (IOException ex1) {}
-            } 
-                
-             
+                System.out.println("User " + user + " has disconnected.");
+                try {
+                    socket.close();
+                    server.removeHandler(this);
+                    break;
+                } catch (IOException ex1) {
+                }
+            }
+
         }
     }
-}
-    
-    
 
+    public void sendState() throws IOException {
+        out.writeObject(server.getState());
+    }
+
+}

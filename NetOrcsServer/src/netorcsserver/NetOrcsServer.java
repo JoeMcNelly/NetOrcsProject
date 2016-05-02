@@ -5,6 +5,7 @@
  */
 package netorcsserver;
 
+import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
@@ -16,42 +17,60 @@ import java.util.List;
  * @author mcnelljd
  */
 class NetOrcsServer {
+
     int port;
     List<ConnectionHandler> handlers = new ArrayList<ConnectionHandler>();
     ServerSocket server;
     HashSet<String> users = new HashSet<String>();
+    State state = new State();
+    int numPlayers = 0;
 
     void start() {
-        while(true) {
-			try {
-				this.server = new ServerSocket(0);
-                                port=server.getLocalPort();
-				System.out.println("NetOrcs server running at port: " + port);
-			}
-			catch(Exception e) {
-				e.printStackTrace();
-				return;
-			}
-			
-			while(true) {
-				try {
-					Socket client = this.server.accept();
-                                        System.out.println("New Client Connected");
-					ConnectionHandler handler = new ConnectionHandler(this, client);
-					this.handlers.add(handler);
+        while (true) {
+            try {
+                this.server = new ServerSocket(0);
+                port = server.getLocalPort();
+                System.out.println("NetOrcs server running at port: " + port);
+            } catch (Exception e) {
+                e.printStackTrace();
+                return;
+            }
 
-					Thread runner = new Thread(handler);
-					runner.start();
-				}
-				catch(Exception e) {
-					e.printStackTrace();
-				}
-			}
-		}
+            while (true) {
+                try {
+                    Socket client = this.server.accept();
+                    System.out.println("New Client Connected");
+                    int playerNumber = ++this.numPlayers;
+                    ConnectionHandler handler = new ConnectionHandler(this, client, "Player " + playerNumber);
+                    this.handlers.add(handler);
+
+                    Thread runner = new Thread(handler);
+                    runner.start();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }
     }
 
     void removeHandler(ConnectionHandler handler) {
         handlers.remove(handler);
     }
-    
+
+    void broadcast() throws IOException {
+        for (ConnectionHandler handler : handlers) {
+            handler.sendState();
+        }
+    }
+
+    void handleAction(ConnectionHandler handler, String input) throws IOException {
+        state.setLRM(input + ", by user " + handler.user);
+        System.out.println("State set as: " + state.getLRM());
+        broadcast();
+    }
+
+    public State getState() {
+        return this.state;
+    }
+
 }

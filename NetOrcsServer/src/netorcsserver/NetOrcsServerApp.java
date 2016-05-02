@@ -18,5 +18,5 @@ public class NetOrcsServerApp {
         NetOrcsServer server = new NetOrcsServer();
         server.start();
     }
-    
+
 }

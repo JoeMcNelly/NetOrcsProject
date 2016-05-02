@@ -26,10 +26,12 @@ public class NetOrcsConnection {
     Socket socket;
     ObjectOutputStream out;
     ObjectInputStream in;
+    State state;
 
     public NetOrcsConnection(String ip, String port) {
         this.IP = ip;
         this.PORT = port;
+        state = new State();
     }
 
     //Connect to remote server, return true if successful
@@ -61,12 +63,12 @@ public class NetOrcsConnection {
 
             @Override
             public void run() {
-                String state;
                 while (true) {
-
+                    System.out.println("Ready to receive...");
                     try {
-                        state = (String) in.readObject();
-                        System.out.println("RECIEVED FROM SERVER: " + state);
+                        Object o = in.readObject();
+                        state = (State) o;
+                        System.out.println("CurrentLMR: " + state.getLRM());
                     } catch (Exception e) {
                         System.err.println("Data received in unknown format");
                     }

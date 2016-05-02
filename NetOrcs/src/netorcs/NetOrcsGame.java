@@ -15,8 +15,8 @@ import javax.swing.JLabel;
  *
  * @author mcnelljd
  */
-public class NetOrcsGame extends JFrame implements KeyListener{
-    
+public class NetOrcsGame extends JFrame implements KeyListener {
+
     private static final int WIDTH = 750;
     private static final int HEIGHT = 750;
     private NetOrcsConnection connection;
@@ -37,10 +37,11 @@ public class NetOrcsGame extends JFrame implements KeyListener{
 
     @Override
     public void keyPressed(KeyEvent e) {
-        
+
     }
 
     @Override
-    public void keyReleased(KeyEvent e) {}
-    
+    public void keyReleased(KeyEvent e) {
+    }
+
 }

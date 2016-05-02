@@ -16,9 +16,9 @@ import javax.swing.JLabel;
  *
  * @author mcnelljd
  */
-public class NetOrcsErrorFrame extends JFrame{
-    
-    public NetOrcsErrorFrame(){
+public class NetOrcsErrorFrame extends JFrame {
+
+    public NetOrcsErrorFrame() {
         setTitle("Error On Connect");
         setSize(400, 100);
         JButton button = new JButton("OK");
@@ -35,5 +35,5 @@ public class NetOrcsErrorFrame extends JFrame{
             }
         });
     }
-    
+
 }
