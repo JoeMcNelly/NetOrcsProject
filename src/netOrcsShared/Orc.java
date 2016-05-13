@@ -32,5 +32,4 @@ public class Orc extends GameObjects{
 	public int size() {
 		return SIZE;
 	}
-	
 }

@@ -48,8 +48,9 @@ public class State implements Serializable {
     public synchronized void addhero(Hero hero){
     	this.heroes.add(hero);
     }
-    public synchronized void removeHero(Hero hero){
-    	this.heroes.remove(hero);
+    public synchronized void killHero(Hero hero){
+    	hero.kill();
+    	this.heroes.set(hero.getIndex(), hero);
     }
     public synchronized void updateHero(Hero hero, int index){
     	this.heroes.set(index, hero);

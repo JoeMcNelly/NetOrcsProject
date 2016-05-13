@@ -47,10 +47,9 @@ class ConnectionHandler implements Runnable {
             String input;
             try {
                 input = (String) in.readObject();
-//                System.out.println("Server Recieved: " + input + " from: " + user);
                 server.handleAction(this, input);
             } catch (Exception ex) {
-                System.out.println("User " + user + " has disconnected.");
+                System.out.println(user + " has disconnected.");
                 try {
                     socket.close();
                     server.removeHandler(this);
@@ -62,10 +61,14 @@ class ConnectionHandler implements Runnable {
         }
     }
 
-    public void sendState() throws IOException {
-        out.writeUnshared(server.getState());
-        out.flush();
-        out.reset();
+    public void sendState() {
+        try {
+			out.writeUnshared(server.getState());
+			out.flush();
+	        out.reset();
+		} catch (IOException e){
+		}
+        
     }
 
 }

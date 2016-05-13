@@ -23,19 +23,23 @@ public class NetOrcsPanel extends JPanel {
 		this.g2 = (Graphics2D) g;
 		if (state != null) {
 			for (GameObjects orc : state.getOrcs()) {
-				Ellipse2D.Double eOrc = new Ellipse2D.Double(orc.getPosition()
-						.getX(), orc.getPosition().getY(), orc.size(), orc.size());
-				g2.setColor(Color.GREEN);
-				g2.fill(eOrc);
-				g2.draw(eOrc);
-				
+				if (orc.isAlive()) {
+					Ellipse2D.Double eOrc = new Ellipse2D.Double(orc.getPosition().getX(), orc.getPosition().getY(),
+							orc.size(), orc.size());
+					g2.setColor(Color.GREEN);
+					g2.fill(eOrc);
+					g2.draw(eOrc);
+
+				}
 			}
-			for(GameObjects hero : state.getHeroes()){
-				Rectangle2D.Double ehero = new Rectangle2D.Double(hero.getPosition()
-						.getX(), hero.getPosition().getY(), hero.size(), hero.size());
-				g2.setColor(Color.BLUE);
-				g2.fill(ehero);
-				g2.draw(ehero);
+			for (GameObjects hero : state.getHeroes()) {
+				if (hero.isAlive()) {
+					Rectangle2D.Double ehero = new Rectangle2D.Double(hero.getPosition().getX(),
+							hero.getPosition().getY(), hero.size(), hero.size());
+					g2.setColor(Color.BLUE);
+					g2.fill(ehero);
+					g2.draw(ehero);
+				}
 			}
 		}
 	}

@@ -65,8 +65,9 @@ class NetOrcsServer {
             while (true) {
                 try {
                     Socket client = this.server.accept();
-                    System.out.println("New Client Connected");
                     int playerNumber = ++this.numPlayers;
+                    System.out.println("Player " + playerNumber + " connected");
+                    
                     ConnectionHandler handler = new ConnectionHandler(this, client, "Player " + playerNumber);
                     this.handlers.add(handler);
                     Thread runner = new Thread(handler);
@@ -80,6 +81,9 @@ class NetOrcsServer {
 
     void removeHandler(ConnectionHandler handler) {
         handlers.remove(handler);
+        Hero hero = handler.hero;
+        hero.kill();
+        state.killHero(hero);
     }
 
     void broadcast() throws IOException {

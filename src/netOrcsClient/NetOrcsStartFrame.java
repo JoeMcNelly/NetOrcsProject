@@ -49,7 +49,7 @@ public class NetOrcsStartFrame extends JFrame {
 
             @Override
             public void actionPerformed(ActionEvent e) {
-                NetOrcsConnection conn = new NetOrcsConnection(ip.getText(), prt.getText());
+                NetOrcsConnection conn = new NetOrcsConnection(ip.getText().trim(), prt.getText().trim());
                 boolean success = conn.connect();
                 if (success) {
                     setVisible(false);
