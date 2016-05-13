@@ -13,6 +13,8 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import netOrcsShared.Hero;
 import netOrcsShared.Orc;
@@ -32,6 +34,21 @@ class NetOrcsServer {
     int numPlayers = 0;
 
     void start() {
+    	Timer timer = new Timer();
+        timer.schedule(new TimerTask() {
+			
+			@Override
+			public void run() {
+				try {
+					addOrc();
+					broadcast();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				
+			}
+		}, 0, 5000);
         while (true) {
             try {
                 this.server = new ServerSocket(0);
