@@ -18,6 +18,7 @@ public class NetOrcsPanel extends JPanel {
 
 	public NetOrcsPanel() {
 		this.size = 10;
+		
 
 	}
 
@@ -29,21 +30,26 @@ public class NetOrcsPanel extends JPanel {
 		System.out.println("IN PAINT BITCH");
 		if (state != null) {
 			for (GameObjects orc : state.getOrcs()) {
-				System.out.println(orc.getPosition().getX() + " "
-						+ orc.getPosition().getY() + " " + this.getGraphics());
 				Ellipse2D.Double eOrc = new Ellipse2D.Double(orc.getPosition()
 						.getX(), orc.getPosition().getY(), size, size);
-				System.out.println(eOrc);
 				g2.setColor(Color.GREEN);
 				g2.fill(eOrc);
 				g2.draw(eOrc);
 				
+			}
+			for(GameObjects hero : state.getHeroes()){
+				Rectangle2D.Double ehero = new Rectangle2D.Double(hero.getPosition()
+						.getX(), hero.getPosition().getY(), size, size);
+				g2.setColor(Color.BLUE);
+				g2.fill(ehero);
+				g2.draw(ehero);
 			}
 		}
 	}
 
 	public void updateState(State s) {
 		this.state = s;
+//		this.paintImmediately(0, 0, 750, 750);
 		repaint();
 	}
 
