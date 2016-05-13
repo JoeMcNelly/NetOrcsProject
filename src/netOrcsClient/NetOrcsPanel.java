@@ -26,7 +26,6 @@ public class NetOrcsPanel extends JPanel {
 	protected void paintComponent(java.awt.Graphics g) {
 		super.paintComponent(g);
 		this.g2 = (Graphics2D) g;
-		this.g2.draw(new Rectangle2D.Double(10, 10, 10, 10));
 		System.out.println("IN PAINT BITCH");
 		if (state != null) {
 			for (GameObjects orc : state.getOrcs()) {
