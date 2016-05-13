@@ -8,6 +8,8 @@ package netOrcsClient;
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
+
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -51,7 +53,12 @@ public class NetOrcsStartFrame extends JFrame {
                 if (success) {
                     setVisible(false);
                     dispose();
-                    NetOrcsGame game = new NetOrcsGame(conn);
+                    try {
+						NetOrcsGame game = new NetOrcsGame(conn);
+					} catch (IOException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
                 } else {
                     NetOrcsErrorFrame error = new NetOrcsErrorFrame();
                 }

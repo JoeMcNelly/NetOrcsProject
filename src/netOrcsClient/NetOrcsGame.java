@@ -7,6 +7,11 @@ package netOrcsClient;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+
+import javax.imageio.ImageIO;
 import javax.swing.JFrame;
 
 /**
@@ -23,7 +28,7 @@ public class NetOrcsGame extends JFrame implements KeyListener {
     private static final int HEIGHT = 750;
     private NetOrcsConnection connection;
 
-    NetOrcsGame(NetOrcsConnection conn) {
+    NetOrcsGame(NetOrcsConnection conn) throws IOException {
         this.connection = conn;
         setTitle("Net Orcs!");
         setSize(WIDTH, HEIGHT);
@@ -31,6 +36,8 @@ public class NetOrcsGame extends JFrame implements KeyListener {
         this.addKeyListener(this);
         this.setVisible(true);
         this.add(new NetOrcsPanel());
+        BufferedImage myImage = ImageIO.read(new File("src/objects/backgrounds/natalie2.jpg"));
+        //this.setContentPane(new BackGroundPanel(myImage));
     }
 
     @Override
