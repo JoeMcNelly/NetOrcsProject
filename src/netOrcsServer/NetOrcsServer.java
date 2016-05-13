@@ -14,6 +14,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
 
+import netOrcsShared.Hero;
 import netOrcsShared.Orc;
 import netOrcsShared.State;
 
@@ -76,12 +77,36 @@ class NetOrcsServer {
     	orc.setIndex(index);
     	orc.setPosition(p);
         state.addOrc(orc);
-        state.updateHero(handler.hero, handler.hero.getIndex());
+        Hero hero = handler.hero;
+        hero = tryAction(hero, input);
+        state.updateHero(hero, hero.getIndex());
         
         broadcast();
     }
 
-    public State getState() {
+    private Hero tryAction(Hero hero, String input) {
+    	Point pos = hero.getPosition();
+    	int x = (int)pos.getX();
+    	int y = (int)pos.getY();
+		switch(input){
+			case "w":
+				y--;
+				break;
+			case "a":
+				x--;
+				break;
+			case "s":
+				y++;
+				break;
+			case "d":
+				x++;
+				break;
+		}
+		hero.setPosition(new Point(x,y));
+		return hero;
+	}
+
+	public State getState() {
         return this.state;
     }
 
