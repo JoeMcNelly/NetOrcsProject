@@ -72,7 +72,7 @@ class NetOrcsServer {
     	Orc orc = new Orc();
     	Random rand = new Random();
     	int index = rand.nextInt();
-    	Point p = new Point(rand.nextInt(), rand.nextInt());
+    	Point p = new Point(rand.nextInt(750), rand.nextInt(750));
     	orc.setIndex(index);
     	orc.setPosition(p);
         state.addOrc(orc);
