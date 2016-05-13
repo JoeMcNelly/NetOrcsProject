@@ -122,11 +122,11 @@ class NetOrcsServer {
 				x--;
 				break;
 			case "s":
-				if (y < 750-obj.size())
+				if (y < 711-obj.size())
 					y++;
 				break;
 			case "d":
-				if (x < 750-obj.size())
+				if (x < 733-obj.size())
 					x++;
 				break;
 		}
