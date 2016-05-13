@@ -21,37 +21,37 @@ public class State implements Serializable {
 	private static final long serialVersionUID = -3807319663566387642L;
 	private List<GameObjects> orcs = new ArrayList<>();
 
-    public List<GameObjects> getOrcs() {
+    public synchronized List<GameObjects> getOrcs() {
         return this.orcs;
     }
 
-    public void setOrcs(ArrayList<GameObjects> orcs) {
+    public synchronized void setOrcs(ArrayList<GameObjects> orcs) {
         this.orcs = orcs;
     }
-    public void addOrc(Orc orc){
+    public synchronized void addOrc(Orc orc){
     	this.orcs.add(orc);
     }
-    public void removeOrc(Orc orc){
+    public synchronized void removeOrc(Orc orc){
     	this.orcs.remove(orc);
     }
     
     
 	private List<GameObjects> heroes = new ArrayList<>();
 
-    public List<GameObjects> getHeroes() {
+    public synchronized List<GameObjects> getHeroes() {
         return this.heroes;
     }
 
-    public void setHeroes(ArrayList<GameObjects> heroes) {
+    public synchronized void setHeroes(ArrayList<GameObjects> heroes) {
         this.heroes = heroes;
     }
-    public void addhero(Hero hero){
+    public synchronized void addhero(Hero hero){
     	this.heroes.add(hero);
     }
-    public void removeHero(Hero hero){
+    public synchronized void removeHero(Hero hero){
     	this.heroes.remove(hero);
     }
-    public void updateHero(Hero hero, int index){
+    public synchronized void updateHero(Hero hero, int index){
     	this.heroes.set(index, hero);
     }
     
