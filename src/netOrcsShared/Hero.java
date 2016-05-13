@@ -2,7 +2,7 @@ package netOrcsShared;
 
 import java.awt.Point;
 
-public class Hero {
+public class Hero extends GameObjects{
 
 	private int index;
 	private Point position;

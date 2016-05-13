@@ -3,7 +3,7 @@ package netOrcsShared;
 import java.awt.Point;
 import java.io.Serializable;
 
-public class Orc implements Serializable{
+public class Orc extends GameObjects{
 	/**
 	 * 
 	 */

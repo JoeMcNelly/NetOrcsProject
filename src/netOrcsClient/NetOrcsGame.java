@@ -30,6 +30,7 @@ public class NetOrcsGame extends JFrame implements KeyListener {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.addKeyListener(this);
         this.setVisible(true);
+        this.add(new NetOrcsPanel());
     }
 
     @Override

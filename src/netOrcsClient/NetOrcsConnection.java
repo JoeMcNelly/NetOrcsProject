@@ -25,10 +25,12 @@ public class NetOrcsConnection {
     Socket socket;
     ObjectOutputStream out;
     ObjectInputStream in;
+    NetOrcsPanel panel;
 
     public NetOrcsConnection(String ip, String port) {
         this.IP = ip;
         this.PORT = port;
+        panel = new NetOrcsPanel();
     }
 
     //Connect to remote server, return true if successful
@@ -68,9 +70,13 @@ public class NetOrcsConnection {
                     try {
                         Object o = in.readObject();
                         state = (State) o;
-                        System.out.println(state.getOrcs().size());
+                        panel.updateState(state);
+                        panel.repaint();
+                      //System.out.println(state.getOrcs().get(0).getPosition());
                     } catch (Exception e) {
+                    	
                         System.err.println("Data received in unknown format");
+                        e.printStackTrace();
                     }
                 }
             }

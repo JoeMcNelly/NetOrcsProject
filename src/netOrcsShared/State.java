@@ -7,6 +7,7 @@ package netOrcsShared;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -18,13 +19,13 @@ public class State implements Serializable {
 	 * 
 	 */
 	private static final long serialVersionUID = -3807319663566387642L;
-	private ArrayList<Orc> orcs = new ArrayList<Orc>();
+	private List<GameObjects> orcs = new ArrayList<>();
 
-    public ArrayList<Orc> getOrcs() {
+    public List<GameObjects> getOrcs() {
         return this.orcs;
     }
 
-    public void setOrcs(ArrayList<Orc> orcs) {
+    public void setOrcs(ArrayList<GameObjects> orcs) {
         this.orcs = orcs;
     }
     public void addOrc(Orc orc){
