@@ -16,6 +16,7 @@ import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import netOrcsShared.GameObjects;
 import netOrcsShared.Hero;
 import netOrcsShared.Orc;
 import netOrcsShared.State;
@@ -50,49 +51,50 @@ class NetOrcsServer {
 
 			}
 		}, 0, 50);
-		while (true) {
-			try {
-				this.server = new ServerSocket(0);
-				port = server.getLocalPort();
-				System.out.println("NetOrcs server running at port: " + port);
-			} catch (Exception e) {
-				e.printStackTrace();
-				return;
-			}
 
-			while (true) {
-				try {
-					Socket client = this.server.accept();
-					System.out.println("New Client Connected");
-					int playerNumber = ++this.numPlayers;
-					ConnectionHandler handler = new ConnectionHandler(this, client, "Player " + playerNumber);
-					this.handlers.add(handler);
-					Thread runner = new Thread(handler);
-					runner.start();
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		}
-	}
+        while (true) {
+            try {
+                this.server = new ServerSocket(0);
+                port = server.getLocalPort();
+                System.out.println("NetOrcs server running at port: " + port);
+            } catch (Exception e) {
+                e.printStackTrace();
+                return;
+            }
 
-	void removeHandler(ConnectionHandler handler) {
-		handlers.remove(handler);
-	}
+            while (true) {
+                try {
+                    Socket client = this.server.accept();
+                    System.out.println("New Client Connected");
+                    int playerNumber = ++this.numPlayers;
+                    ConnectionHandler handler = new ConnectionHandler(this, client, "Player " + playerNumber);
+                    this.handlers.add(handler);
+                    Thread runner = new Thread(handler);
+                    runner.start();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
 
-	void broadcast() throws IOException {
-		for (ConnectionHandler handler : handlers) {
-			handler.sendState();
-		}
-	}
+    void removeHandler(ConnectionHandler handler) {
+        handlers.remove(handler);
+    }
 
-	void handleAction(ConnectionHandler handler, String input) throws IOException {
-		Hero hero = handler.hero;
-		hero = tryAction(hero, input);
-		state.updateHero(hero, hero.getIndex());
-		state.updateHero(handler.hero, handler.hero.getIndex());
-		// broadcast();
-	}
+    void broadcast() throws IOException {
+        for (ConnectionHandler handler : handlers) {
+            handler.sendState();
+        }
+    }
+
+    void handleAction(ConnectionHandler handler, String input) throws IOException {
+    	Hero hero = handler.hero;
+        hero = (Hero) tryAction(hero, input);
+        state.updateHero(hero, hero.getIndex());
+        state.updateHero(handler.hero, handler.hero.getIndex());
+        //broadcast();
+    }
 
 	protected void addOrc() {
 		Random rand = new Random();
@@ -108,26 +110,30 @@ class NetOrcsServer {
 
 	}
 
-	private Hero tryAction(Hero hero, String input) {
-		Point pos = hero.getPosition();
-		int x = (int) pos.getX();
-		int y = (int) pos.getY();
-		switch (input) {
-		case "w":
-			y--;
-			break;
-		case "a":
-			x--;
-			break;
-		case "s":
-			y++;
-			break;
-		case "d":
-			x++;
-			break;
+    private GameObjects tryAction(GameObjects obj, String input) {
+    	Point pos = obj.getPosition();
+    	int x = (int)pos.getX();
+    	int y = (int)pos.getY();
+		switch(input){
+			case "w":
+				if (y > 0)
+					y--;
+				break;
+			case "a":
+				if (x > 0)
+				x--;
+				break;
+			case "s":
+				if (y < 750-obj.size())
+					y++;
+				break;
+			case "d":
+				if (x < 750-obj.size())
+					x++;
+				break;
 		}
-		hero.setPosition(new Point(x, y));
-		return hero;
+		obj.setPosition(new Point(x,y));
+		return obj;
 	}
 
 	public State getState() {

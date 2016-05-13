@@ -8,4 +8,5 @@ public abstract class GameObjects implements Serializable{
 	abstract public void setPosition(Point position);
 	abstract public int getIndex();
 	abstract public void setIndex(int index);
+	abstract public int size();
 }
