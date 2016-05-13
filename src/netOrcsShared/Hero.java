@@ -4,6 +4,10 @@ import java.awt.Point;
 
 public class Hero extends GameObjects{
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -1463577444691292450L;
 	private int index;
 	private Point position;
 	

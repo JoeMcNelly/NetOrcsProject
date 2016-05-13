@@ -76,6 +76,8 @@ class NetOrcsServer {
     	orc.setIndex(index);
     	orc.setPosition(p);
         state.addOrc(orc);
+        state.updateHero(handler.hero, handler.hero.getIndex());
+        
         broadcast();
     }
 

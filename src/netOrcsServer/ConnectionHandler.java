@@ -5,10 +5,13 @@
  */
 package netOrcsServer;
 
+import java.awt.Point;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+
+import netOrcsShared.Hero;
 
 /**
  *
@@ -21,6 +24,7 @@ class ConnectionHandler implements Runnable {
     NetOrcsServer server;
     Socket socket;
     String user;
+    Hero hero;
 
     ConnectionHandler(NetOrcsServer server, Socket socket, String user) throws IOException {
         out = new ObjectOutputStream(socket.getOutputStream());
@@ -29,6 +33,10 @@ class ConnectionHandler implements Runnable {
         this.server = server;
         this.socket = socket;
         this.user = user;
+        hero = new Hero();
+        hero.setIndex(server.numPlayers - 1);
+        hero.setPosition(new Point((int)Math.floor(750/2), (int)Math.floor(750/2)));
+        this.server.state.addhero(hero);
     }
 
     @Override
@@ -38,7 +46,7 @@ class ConnectionHandler implements Runnable {
             String input;
             try {
                 input = (String) in.readObject();
-                System.out.println("Server Recieved: " + input + " from user: " + user);
+                System.out.println("Server Recieved: " + input + " from: " + user);
                 server.handleAction(this, input);
             } catch (Exception ex) {
                 System.out.println("User " + user + " has disconnected.");

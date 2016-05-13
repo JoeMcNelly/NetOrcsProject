@@ -34,4 +34,25 @@ public class State implements Serializable {
     public void removeOrc(Orc orc){
     	this.orcs.remove(orc);
     }
+    
+    
+	private List<GameObjects> heroes = new ArrayList<>();
+
+    public List<GameObjects> getHeroes() {
+        return this.heroes;
+    }
+
+    public void setHeroes(ArrayList<GameObjects> heroes) {
+        this.heroes = heroes;
+    }
+    public void addhero(Hero hero){
+    	this.heroes.add(hero);
+    }
+    public void removeHero(Hero hero){
+    	this.heroes.remove(hero);
+    }
+    public void updateHero(Hero hero, int index){
+    	this.heroes.set(index, hero);
+    }
+    
 }
