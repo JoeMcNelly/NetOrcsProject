@@ -25,12 +25,13 @@ public class NetOrcsConnection {
     Socket socket;
     ObjectOutputStream out;
     ObjectInputStream in;
-    NetOrcsPanel panel;
+
 
     public NetOrcsConnection(String ip, String port) {
         this.IP = ip;
         this.PORT = port;
-        panel = new NetOrcsPanel();
+       
+        
     }
 
     //Connect to remote server, return true if successful
@@ -70,8 +71,8 @@ public class NetOrcsConnection {
                     try {
                         Object o = in.readObject();
                         state = (State) o;
-                        panel.updateState(state);
-                        panel.repaint();
+                        NetOrcsGame.panel.updateState(state);
+//                        NetOrcsGame.panel.repaint();
                       //System.out.println(state.getOrcs().get(0).getPosition());
                     } catch (Exception e) {
                     	

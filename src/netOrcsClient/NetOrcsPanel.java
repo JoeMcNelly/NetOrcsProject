@@ -33,17 +33,18 @@ public class NetOrcsPanel extends JPanel {
 						+ orc.getPosition().getY() + " " + this.getGraphics());
 				Ellipse2D.Double eOrc = new Ellipse2D.Double(orc.getPosition()
 						.getX(), orc.getPosition().getY(), size, size);
-				g2.draw(eOrc);
+				System.out.println(eOrc);
 				g2.setColor(Color.GREEN);
 				g2.fill(eOrc);
+				g2.draw(eOrc);
+				
 			}
 		}
 	}
 
 	public void updateState(State s) {
 		this.state = s;
-//		this.paintImmediately(0, 0, 750, 750);
-		this.repaint();
+		repaint();
 	}
 
 }

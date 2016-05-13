@@ -27,15 +27,17 @@ public class NetOrcsGame extends JFrame implements KeyListener {
 	private static final int WIDTH = 750;
     private static final int HEIGHT = 750;
     private NetOrcsConnection connection;
+    static NetOrcsPanel panel;
 
     NetOrcsGame(NetOrcsConnection conn) throws IOException {
         this.connection = conn;
+        panel = new NetOrcsPanel();
         setTitle("Net Orcs!");
         setSize(WIDTH, HEIGHT);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.addKeyListener(this);
         this.setVisible(true);
-        this.add(new NetOrcsPanel());
+        this.add(panel);
         BufferedImage myImage = ImageIO.read(new File("src/objects/backgrounds/natalie2.jpg"));
         //this.setContentPane(new BackGroundPanel(myImage));
     }

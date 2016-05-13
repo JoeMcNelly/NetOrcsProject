@@ -44,6 +44,7 @@ public class NetOrcsStartFrame extends JFrame {
         add(pan1, BorderLayout.WEST);
         add(pan2, BorderLayout.EAST);
         add(button, BorderLayout.SOUTH);
+        
         ActionListener start = new ActionListener() {
 
             @Override
