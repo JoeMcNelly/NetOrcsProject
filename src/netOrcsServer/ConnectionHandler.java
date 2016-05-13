@@ -10,8 +10,6 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
-import java.util.Timer;
-import java.util.TimerTask;
 
 import netOrcsShared.Hero;
 
@@ -49,7 +47,7 @@ class ConnectionHandler implements Runnable {
             String input;
             try {
                 input = (String) in.readObject();
-                System.out.println("Server Recieved: " + input + " from: " + user);
+//                System.out.println("Server Recieved: " + input + " from: " + user);
                 server.handleAction(this, input);
             } catch (Exception ex) {
                 System.out.println("User " + user + " has disconnected.");

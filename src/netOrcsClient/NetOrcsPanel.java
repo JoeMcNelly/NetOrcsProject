@@ -4,7 +4,6 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Rectangle2D;
-import java.util.List;
 
 import javax.swing.JPanel;
 
@@ -26,7 +25,6 @@ public class NetOrcsPanel extends JPanel {
 	protected void paintComponent(java.awt.Graphics g) {
 		super.paintComponent(g);
 		this.g2 = (Graphics2D) g;
-		System.out.println("IN PAINT BITCH");
 		if (state != null) {
 			for (GameObjects orc : state.getOrcs()) {
 				Ellipse2D.Double eOrc = new Ellipse2D.Double(orc.getPosition()
@@ -48,7 +46,6 @@ public class NetOrcsPanel extends JPanel {
 
 	public synchronized void updateState(State s) {
 		this.state = s;
-//		this.paintImmediately(0, 0, 750, 750);
 		repaint();
 	}
 

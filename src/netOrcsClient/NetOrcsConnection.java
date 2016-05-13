@@ -11,7 +11,6 @@ import java.io.ObjectOutputStream;
 import java.net.InetAddress;
 import java.net.Socket;
 
-import netOrcsShared.Orc;
 import netOrcsShared.State;
 
 /**
@@ -39,7 +38,6 @@ public class NetOrcsConnection {
         try {
             int port = Integer.parseInt(PORT);
             socket = new Socket(InetAddress.getByName(IP), port);
-            System.out.println(IP);
             out = new ObjectOutputStream(socket.getOutputStream());
             out.flush();
             in = new ObjectInputStream(socket.getInputStream());
@@ -67,13 +65,10 @@ public class NetOrcsConnection {
             public void run() {
             	State state;
                 while (true) {
-                    //System.out.println("Ready to receive...");
                     try {
                         Object o = in.readObject();
                         state = (State) o;
                         NetOrcsGame.panel.updateState(state);
-//                        NetOrcsGame.panel.repaint();
-                      //System.out.println(state.getOrcs().get(0).getPosition());
                     } catch (Exception e) {
                     	
                         System.err.println("Data received in unknown format");
