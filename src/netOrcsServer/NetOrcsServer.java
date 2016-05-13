@@ -32,15 +32,21 @@ class NetOrcsServer {
     HashSet<String> users = new HashSet<String>();
     State state = new State();
     int numPlayers = 0;
+    
 
     void start() {
+    	addOrc();
+    	addOrc();
+    	addOrc();
+    	addOrc();
+    	addOrc();
     	Timer timer = new Timer();
         timer.schedule(new TimerTask() {
 			
 			@Override
 			public void run() {
 				try {
-					addOrc();
+					//addOrc();
 					broadcast();
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
@@ -48,7 +54,7 @@ class NetOrcsServer {
 				}
 				
 			}
-		}, 0, 5000);
+		}, 0, 50);
         while (true) {
             try {
                 this.server = new ServerSocket(0);
@@ -90,7 +96,7 @@ class NetOrcsServer {
         hero = tryAction(hero, input);
         state.updateHero(hero, hero.getIndex());
         state.updateHero(handler.hero, handler.hero.getIndex());
-        broadcast();
+        //broadcast();
     }
 
 	protected void addOrc() {
