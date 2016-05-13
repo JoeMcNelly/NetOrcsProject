@@ -10,6 +10,8 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.InetAddress;
 import java.net.Socket;
+
+import netOrcsShared.Orc;
 import netOrcsShared.State;
 
 /**
@@ -66,7 +68,7 @@ public class NetOrcsConnection {
                     try {
                         Object o = in.readObject();
                         state = (State) o;
-                        System.out.println("CurrentLMR: " + state.getLRM());
+                        System.out.println(state.getOrcs().size());
                     } catch (Exception e) {
                         System.err.println("Data received in unknown format");
                     }

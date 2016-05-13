@@ -1,8 +1,13 @@
 package netOrcsShared;
 
 import java.awt.Point;
+import java.io.Serializable;
 
-public class Orc {
+public class Orc implements Serializable{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -8670228112997194074L;
 	private Point position;
 	private int index;
 	public Orc(){

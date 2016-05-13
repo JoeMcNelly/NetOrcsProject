@@ -5,13 +5,16 @@
  */
 package netOrcsServer;
 
+import java.awt.Point;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Random;
 
+import netOrcsShared.Orc;
 import netOrcsShared.State;
 
 /**
@@ -66,8 +69,13 @@ class NetOrcsServer {
     }
 
     void handleAction(ConnectionHandler handler, String input) throws IOException {
-        state.setLRM(input + ", by user " + handler.user);
-        System.out.println("State set as: " + state.getLRM());
+    	Orc orc = new Orc();
+    	Random rand = new Random();
+    	int index = rand.nextInt();
+    	Point p = new Point(rand.nextInt(), rand.nextInt());
+    	orc.setIndex(index);
+    	orc.setPosition(p);
+        state.addOrc(orc);
         broadcast();
     }
 
