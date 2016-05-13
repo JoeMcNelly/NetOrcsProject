@@ -16,6 +16,7 @@ import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import netOrcsShared.GameObjects;
 import netOrcsShared.Hero;
 import netOrcsShared.Orc;
 import netOrcsShared.State;
@@ -93,7 +94,7 @@ class NetOrcsServer {
 
     void handleAction(ConnectionHandler handler, String input) throws IOException {
     	Hero hero = handler.hero;
-        hero = tryAction(hero, input);
+        hero = (Hero) tryAction(hero, input);
         state.updateHero(hero, hero.getIndex());
         state.updateHero(handler.hero, handler.hero.getIndex());
         //broadcast();
@@ -110,8 +111,8 @@ class NetOrcsServer {
 
 	}
 
-    private Hero tryAction(Hero hero, String input) {
-    	Point pos = hero.getPosition();
+    private GameObjects tryAction(GameObjects obj, String input) {
+    	Point pos = obj.getPosition();
     	int x = (int)pos.getX();
     	int y = (int)pos.getY();
 		switch(input){
@@ -124,16 +125,16 @@ class NetOrcsServer {
 				x--;
 				break;
 			case "s":
-				if (y < 750)
+				if (y < 750-obj.size())
 					y++;
 				break;
 			case "d":
-				if (x < 750)
+				if (x < 750-obj.size())
 					x++;
 				break;
 		}
-		hero.setPosition(new Point(x,y));
-		return hero;
+		obj.setPosition(new Point(x,y));
+		return obj;
 	}
 
 	public State getState() {
