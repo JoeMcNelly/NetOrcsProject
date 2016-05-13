@@ -8,6 +8,7 @@ package netOrcsClient;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.net.InetAddress;
 import java.net.Socket;
 import netOrcsShared.State;
 
@@ -32,12 +33,14 @@ public class NetOrcsConnection {
     public boolean connect() {
         try {
             int port = Integer.parseInt(PORT);
-            socket = new Socket(IP, port);
+            socket = new Socket(InetAddress.getByName(IP), port);
+            System.out.println(IP);
             out = new ObjectOutputStream(socket.getOutputStream());
             out.flush();
             in = new ObjectInputStream(socket.getInputStream());
             listen();
         } catch (Exception e) {
+        	e.printStackTrace();
             return false;
         }
         return true;
