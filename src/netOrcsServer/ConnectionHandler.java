@@ -55,7 +55,7 @@ class ConnectionHandler implements Runnable {
 
     public void sendState() throws IOException {
     	System.out.println("XXXXXXXXX" + server.state.getLRM());
-        out.writeObject(server.getState());
+        out.writeUnshared(server.getState());
         out.flush();
     }
 
