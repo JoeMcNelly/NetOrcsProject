@@ -10,6 +10,8 @@ public class Orc extends GameObjects{
 	private static final long serialVersionUID = -8670228112997194074L;
 	private Point position;
 	private int index;
+	public static final int SIZE = 10;
+	
 	public Orc(){
 		
 	}
@@ -26,5 +28,9 @@ public class Orc extends GameObjects{
 		this.index = index;
 	}
 
+	@Override
+	public int size() {
+		return SIZE;
+	}
 	
 }

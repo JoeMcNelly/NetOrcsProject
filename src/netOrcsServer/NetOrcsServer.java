@@ -116,16 +116,20 @@ class NetOrcsServer {
     	int y = (int)pos.getY();
 		switch(input){
 			case "w":
-				y--;
+				if (y > 0)
+					y--;
 				break;
 			case "a":
+				if (x > 0)
 				x--;
 				break;
 			case "s":
-				y++;
+				if (y < 750)
+					y++;
 				break;
 			case "d":
-				x++;
+				if (x < 750)
+					x++;
 				break;
 		}
 		hero.setPosition(new Point(x,y));
