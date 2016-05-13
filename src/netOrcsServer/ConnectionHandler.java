@@ -10,6 +10,8 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import netOrcsShared.Hero;
 
@@ -37,6 +39,21 @@ class ConnectionHandler implements Runnable {
         hero.setIndex(server.numPlayers - 1);
         hero.setPosition(new Point((int)Math.floor(750/2), (int)Math.floor(750/2)));
         this.server.state.addhero(hero);
+        Timer timer = new Timer();
+        timer.schedule(new TimerTask() {
+			
+			@Override
+			public void run() {
+				try {
+					server.addOrc();
+					server.broadcast();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				
+			}
+		}, 0, 5000);
     }
 
     @Override

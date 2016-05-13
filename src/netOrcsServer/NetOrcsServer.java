@@ -49,7 +49,6 @@ class NetOrcsServer {
                     int playerNumber = ++this.numPlayers;
                     ConnectionHandler handler = new ConnectionHandler(this, client, "Player " + playerNumber);
                     this.handlers.add(handler);
-
                     Thread runner = new Thread(handler);
                     runner.start();
                 } catch (Exception e) {
@@ -70,19 +69,23 @@ class NetOrcsServer {
     }
 
     void handleAction(ConnectionHandler handler, String input) throws IOException {
-    	Orc orc = new Orc();
+    	Hero hero = handler.hero;
+        hero = tryAction(hero, input);
+        state.updateHero(hero, hero.getIndex());
+        state.updateHero(handler.hero, handler.hero.getIndex());
+        broadcast();
+    }
+
+	protected void addOrc() {
+		Orc orc = new Orc();
     	Random rand = new Random();
     	int index = rand.nextInt();
     	Point p = new Point(rand.nextInt(750), rand.nextInt(750));
     	orc.setIndex(index);
     	orc.setPosition(p);
         state.addOrc(orc);
-        Hero hero = handler.hero;
-        hero = tryAction(hero, input);
-        state.updateHero(hero, hero.getIndex());
-        
-        broadcast();
-    }
+
+	}
 
     private Hero tryAction(Hero hero, String input) {
     	Point pos = hero.getPosition();
