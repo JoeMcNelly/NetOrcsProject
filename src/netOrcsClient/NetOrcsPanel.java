@@ -12,13 +12,9 @@ import netOrcsShared.State;
 
 public class NetOrcsPanel extends JPanel {
 	Graphics2D g2;
-	int size;
 	State state;
 
 	public NetOrcsPanel() {
-		this.size = 10;
-		
-
 	}
 
 	@Override
@@ -28,7 +24,7 @@ public class NetOrcsPanel extends JPanel {
 		if (state != null) {
 			for (GameObjects orc : state.getOrcs()) {
 				Ellipse2D.Double eOrc = new Ellipse2D.Double(orc.getPosition()
-						.getX(), orc.getPosition().getY(), size, size);
+						.getX(), orc.getPosition().getY(), orc.size(), orc.size());
 				g2.setColor(Color.GREEN);
 				g2.fill(eOrc);
 				g2.draw(eOrc);
@@ -36,7 +32,7 @@ public class NetOrcsPanel extends JPanel {
 			}
 			for(GameObjects hero : state.getHeroes()){
 				Rectangle2D.Double ehero = new Rectangle2D.Double(hero.getPosition()
-						.getX(), hero.getPosition().getY(), size, size);
+						.getX(), hero.getPosition().getY(), hero.size(), hero.size());
 				g2.setColor(Color.BLUE);
 				g2.fill(ehero);
 				g2.draw(ehero);
