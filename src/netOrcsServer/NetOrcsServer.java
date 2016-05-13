@@ -107,9 +107,7 @@ class NetOrcsServer {
 			orc.setPosition(p);
 			state.addOrc(orc);
 		}
-
 	}
-
     private GameObjects tryAction(GameObjects obj, String input) {
     	Point pos = obj.getPosition();
     	int x = (int)pos.getX();
