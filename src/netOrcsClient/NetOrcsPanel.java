@@ -47,7 +47,7 @@ public class NetOrcsPanel extends JPanel {
 		}
 	}
 
-	public void updateState(State s) {
+	public synchronized void updateState(State s) {
 		this.state = s;
 //		this.paintImmediately(0, 0, 750, 750);
 		repaint();
