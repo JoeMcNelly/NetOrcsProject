@@ -12,7 +12,7 @@ import javax.swing.JFrame;
 public class NetOrcsReadyFrame extends JFrame{
 
 	private static final long serialVersionUID = 1L;
-	JButton readyButton = new JButton("Not Ready");
+	JButton readyButton = new JButton("Ready Up!");
 	NetOrcsGame game;
 	public NetOrcsReadyFrame(NetOrcsGame nOG) {
 		game=nOG;
@@ -44,8 +44,6 @@ public class NetOrcsReadyFrame extends JFrame{
 		});
     }
 	public void changeReadiness(){
-			readyButton.setText("Ready!");
-			readyButton.setEnabled(false);
 			game.fireAction("ready");
 			setVisible(false);
 			dispose();

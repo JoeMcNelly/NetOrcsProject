@@ -11,10 +11,15 @@ public class Orc extends GameObjects{
 	private Point position;
 	private int index;
 	public static final int SIZE = 10;
-	
+	private boolean angry=false;
+	private static final int NORMAL_ORC_SPEED=2;
+	private static final int ANGRY_ORC_SPEED=2;
 	public Orc(){
-		
+		super();
+		this.speed=NORMAL_ORC_SPEED;
+		this.color=Color.GREEN;
 	}
+	
 	public Point getPosition() {
 		return position;
 	}
@@ -41,5 +46,28 @@ public class Orc extends GameObjects{
 	public void setColor(Color color) {
 		this.color = color;
 		
+	}
+	@Override
+	public void setSpeed(int speed) {
+		this.speed=speed;
+	}
+	@Override
+	public int getSpeed() {
+		return this.speed;
+	}
+	
+	public boolean getAngry() {
+		return this.angry;
+	}
+	
+	public void setAngry(boolean angry) {
+		this.angry=angry;
+		if(this.angry){
+			this.color=Color.RED;
+			this.speed=ANGRY_ORC_SPEED;
+		}else {
+			this.color=Color.GREEN;
+			this.speed=NORMAL_ORC_SPEED;
+		}
 	}
 }

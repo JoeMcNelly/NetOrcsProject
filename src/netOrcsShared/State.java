@@ -73,7 +73,7 @@ public class State implements Serializable {
     		}
     	}
     	if(trueVals == heroes.size()){
-    		return heroes.size() > 0;
+    		return true;
     	}else {
     		return false;
     	}

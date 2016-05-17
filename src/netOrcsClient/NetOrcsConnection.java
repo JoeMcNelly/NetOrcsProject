@@ -70,6 +70,7 @@ public class NetOrcsConnection {
                         state = (State) o;
                         //System.out.println(state.gameOver());
                         NetOrcsGame.panel.updateState(state);
+                        //NetOrcsGame.leaderBoard.updateState(state);
                         if(state.gameOver()){
                         	 break;
                         }

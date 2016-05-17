@@ -12,13 +12,11 @@ public class Hero extends GameObjects{
 	private int index;
 	private Point position;
 	public static final int SIZE = 10;
-	private boolean left = false;
-	private boolean right = false;
-	private boolean up = false;
-	private boolean down = false;
+	private static final int HERO_SPEED=4;
 	
 	public Hero(){
-		
+		super();
+		this.speed=HERO_SPEED;
 	}
 	
 	public int getIndex() {
@@ -39,42 +37,6 @@ public class Hero extends GameObjects{
 		return SIZE;
 	}
 	
-	public void moving (String startStop, String direction) {
-		boolean temp = false;
-		if (startStop.equals("start")){
-			temp = true;
-		}
-		
-		switch(direction){
-		case "w":
-			up=temp;
-			break;
-		case "a":
-			left=temp;
-			break;
-		case "s":
-			down=temp;
-			break;
-		case "d":
-			right=temp;
-			break;
-		default:
-			break;
-	}
-	}
-	
-	public boolean getUp(){
-		return up;
-	}
-	public boolean getDown(){
-		return down;
-	}
-	public boolean getRight(){
-		return right;
-	}
-	public boolean getLeft(){
-		return left;
-	}
 
 	@Override
 	public Color getColor() {
@@ -85,5 +47,15 @@ public class Hero extends GameObjects{
 	public void setColor(Color color) {
 		this.color = color;
 		
+	}
+
+	@Override
+	public void setSpeed(int speed) {
+		this.speed=speed;
+	}
+
+	@Override
+	public int getSpeed() {
+		return this.speed;
 	}
 }
