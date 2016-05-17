@@ -36,7 +36,6 @@ public class NetOrcsPanel extends JPanel {
 				}
 			}
 			for (GameObjects hero : state.getHeroes()) {
-				System.out.println(state.getHeroes().size());
 				if (hero.isAlive()) {
 					Rectangle2D.Double ehero = new Rectangle2D.Double(hero
 							.getPosition().getX(), hero.getPosition().getY(),
@@ -58,7 +57,7 @@ public class NetOrcsPanel extends JPanel {
 					+ " has won.\n Would you like to play again", "Game Over",
 					JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
 			if (response == JOptionPane.NO_OPTION) {
-				System.out.println("No");
+				System.exit(0);
 			} else if (response == JOptionPane.YES_OPTION) {
 				System.out.println("Yes");
 			}
