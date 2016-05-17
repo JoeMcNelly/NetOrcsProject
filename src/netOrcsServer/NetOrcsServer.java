@@ -6,10 +6,12 @@
 package netOrcsServer;
 
 import java.awt.Point;
+import java.awt.geom.Rectangle2D;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
@@ -35,6 +37,8 @@ class NetOrcsServer {
 	int numPlayers = 0;
 	double chanceToSpawnOrc = 0.05;
 
+	// HashMap<Rectangle2D.Double, GameObjects> orcPosition = new HashMap<>();
+
 	void start() {
 		Timer timer = new Timer();
 		timer.schedule(new TimerTask() {
@@ -53,7 +57,6 @@ class NetOrcsServer {
 
 			}
 		}, 0, 50);
-
         while (true) {
             try {
                 this.server = new ServerSocket(0);
@@ -130,56 +133,82 @@ class NetOrcsServer {
 			orc.setIndex(index);
 			orc.setPosition(p);
 			state.addOrc(orc);
+			// this.orcPosition.put(new Rectangle2D.Double(p.getX(), p.getY(),
+			// p.getX() + orc.size(), p.getY() + orc.size()), orc);
 		}
 	}
-	
+
 	private void moveOrcs() {
 		Random rand = new Random();
 		String direction = "";
 		for (GameObjects g : state.getOrcs()) {
-		if (rand.nextDouble() < 0.5) {
 			if (rand.nextDouble() < 0.5) {
-				direction="w";
+				if (rand.nextDouble() < 0.5) {
+					direction = "w";
+				} else {
+					direction = "d";
+				}
 			} else {
-				direction="d";
+				if (rand.nextDouble() < 0.5) {
+					direction = "a";
+				} else {
+					direction = "s";
+				}
 			}
+			tryAction(g, direction);
+			// Point p = g.getPosition();
+			// this.orcPosition.put(new Rectangle2D.Double(p.getX(), p.getY(),
+			// p.getX() + g.size(), p.getY() + g.size()), g);
 		}
-		else {
-			if (rand.nextDouble() < 0.5){
-				direction="a";
-			} else {
-				direction="s";
-			}
-		}
-		tryAction(g,direction);
-		}
-		
-	
+
 	}
-	
-    private GameObjects tryAction(GameObjects obj, String input) {
-    	Point pos = obj.getPosition();
-    	int x = (int)pos.getX();
-    	int y = (int)pos.getY();
-		switch(input){
-			case "w":
-				if (y > 0)
-					y-=4;
-				break;
-			case "a":
-				if (x > 0)
-				x-=4;
-				break;
-			case "s":
-				if (y < 708-obj.size())//711-obj.size())
-					y+=4;
-				break;
-			case "d":
-				if (x < 730 - obj.size())//733-obj.size())
-					x+=4;
-				break;
+
+	public void collisionDetection() {
+		for (GameObjects hero : state.getHeroes()) {
+			double heroRightX = hero.getPosition().getX() + hero.size();
+			double heroBottomY = hero.getPosition().getY() + hero.size();
+			double heroLeftX = hero.getPosition().getX();
+			double heroTopY = hero.getPosition().getY();
+			for (GameObjects orc : state.getOrcs()) {
+
+				double orcX = orc.getPosition().getX() + orc.size() / 2;
+				double orcY = orc.getPosition().getY() + orc.size() / 2;
+
+				if (heroLeftX <= orcX && heroRightX >= orcX) {
+					if (heroTopY <= orcY && heroBottomY >= orcY) {
+						state.killHero((Hero) hero);
+					}
+				}
+
+			}
+
 		}
-		obj.setPosition(new Point(x,y));
+	}
+
+	private GameObjects tryAction(GameObjects obj, String input) {
+		Point pos = obj.getPosition();
+		int x = (int) pos.getX();
+		int y = (int) pos.getY();
+		switch (input) {
+		case "w":
+			if (y > 0)
+				y -= 4;
+			break;
+		case "a":
+			if (x > 0)
+				x -= 4;
+			break;
+		case "s":
+			if (y < 708 - obj.size())// 711-obj.size())
+				y += 4;
+			break;
+		case "d":
+			if (x < 730 - obj.size())// 733-obj.size())
+				x += 4;
+			break;
+		}
+		obj.setPosition(new Point(x, y));
+		collisionDetection();
 		return obj;
 	}
 
