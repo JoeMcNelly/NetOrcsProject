@@ -104,9 +104,11 @@ class NetOrcsServer {
     }
 
     void broadcast() throws IOException {
+    	synchronized(handlers) {
     		for (ConnectionHandler handler : handlers) {
     			handler.sendState();
     		}
+    	}
     }
 
     void handleAction(ConnectionHandler handler, String input) throws IOException {
