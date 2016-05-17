@@ -36,6 +36,7 @@ class NetOrcsServer {
 	State state = new State();
 	int numPlayers = 0;
 	double chanceToSpawnOrc = 0.05;
+	int angerDistance = 100;
 	List<Color> heroColors = new ArrayList<>();
 
 	// HashMap<Rectangle2D.Double, GameObjects> orcPosition = new HashMap<>();
@@ -62,6 +63,7 @@ class NetOrcsServer {
 					addOrc();
 					moveOrcs();
 					broadcast();
+					collisionDetection();
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -182,26 +184,50 @@ class NetOrcsServer {
 	}
 
 	public void collisionDetection() {
-		for (GameObjects hero : state.getHeroes()) {
-			double heroRightX = hero.getPosition().getX() + hero.size();
-			double heroBottomY = hero.getPosition().getY() + hero.size();
-			double heroLeftX = hero.getPosition().getX();
-			double heroTopY = hero.getPosition().getY();
-			for (GameObjects orc : state.getOrcs()) {
+		for (GameObjects go : state.getOrcs()) {
+			Orc orc = (Orc) go;
+			boolean angry = false;
+			for (GameObjects hero : state.getHeroes()) {
+				double heroRightX = hero.getPosition().getX() + hero.size();
+				double heroBottomY = hero.getPosition().getY() + hero.size();
+				double heroLeftX = hero.getPosition().getX();
+				double heroTopY = hero.getPosition().getY();
+			
 
-				double orcX = orc.getPosition().getX() + orc.size() / 2;
-				double orcY = orc.getPosition().getY() + orc.size() / 2;
+//				double orcX = orc.getPosition().getX() + orc.size() / 2;
+//				double orcY = orc.getPosition().getY() + orc.size() / 2;
 
-				if (heroLeftX <= orcX && heroRightX >= orcX) {
-					if (heroTopY <= orcY && heroBottomY >= orcY) {
+//				if (heroLeftX <= orcX && heroRightX >= orcX) {
+//					if (heroTopY <= orcY && heroBottomY >= orcY) {
+//						state.killHero((Hero) hero);
+//					}
+//				}
+
+				if(collided(heroLeftX,heroRightX,heroTopY,heroBottomY,orc.getPosition().getX(),orc.getPosition().getY()) ||
+					collided(heroLeftX,heroRightX,heroTopY,heroBottomY,orc.getPosition().getX()+orc.size(),orc.getPosition().getY()) ||
+					collided(heroLeftX,heroRightX,heroTopY,heroBottomY, orc.getPosition().getX(),orc.getPosition().getY()+orc.size()) ||
+					collided(heroLeftX,heroRightX,heroTopY,heroBottomY, orc.getPosition().getX()+orc.size(),orc.getPosition().getY()+orc.size())){
 						state.killHero((Hero) hero);
-					}
 				}
-
+				double xdiff = (orc.getPosition().getX() + orc.size() / 2) - (hero.getPosition().getX() + hero.size() / 2);
+				double ydiff = (orc.getPosition().getY() + orc.size() / 2) - (hero.getPosition().getY() + hero.size() / 2);
+				angry = angry || (Math.sqrt(Math.pow(xdiff,2) + Math.pow(ydiff,2)) < this.angerDistance && hero.isAlive());
 			}
+			orc.setAngry(angry);
 
 		}
 	}
+	
+	public boolean collided(double heroLeftX, double heroRightX, double heroTopY, double heroBottomY, double orcX, double orcY) {
+		if (heroLeftX <= orcX && heroRightX >= orcX) {
+			if (heroTopY <= orcY && heroBottomY >= orcY) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	
 
 	private GameObjects tryAction(GameObjects obj, String input) {
 		Point pos = obj.getPosition();
@@ -230,7 +256,6 @@ class NetOrcsServer {
 			break;
 		}
 		obj.setPosition(new Point(x, y));
-		collisionDetection();
 		return obj;
 	}
 
