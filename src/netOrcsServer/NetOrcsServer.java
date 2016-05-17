@@ -146,7 +146,11 @@ class NetOrcsServer {
 			Point p = new Point(rand.nextInt(750), rand.nextInt(750));
 			orc.setIndex(index);
 			orc.setPosition(p);
+			if(rand.nextDouble() < 0.3) {
+				orc.setAngry(true);
+			}
 			state.addOrc(orc);
+			
 			// this.orcPosition.put(new Rectangle2D.Double(p.getX(), p.getY(),
 			// p.getX() + orc.size(), p.getY() + orc.size()), orc);
 		}
@@ -205,20 +209,24 @@ class NetOrcsServer {
 		int y = (int) pos.getY();
 		switch (input) {
 		case "w":
-			if (y > 0)
-				y -= 4;
+			y -= obj.getSpeed();
+			if (y < 0)
+				y = 0;
 			break;
 		case "a":
-			if (x > 0)
-				x -= 4;
+			x -= obj.getSpeed();
+			if (x< 0)
+				x = 0;
 			break;
 		case "s":
-			if (y < 708 - obj.size())// 711-obj.size())
-				y += 4;
+			y += obj.getSpeed();
+			if (y >711-obj.size())
+				y = 711-obj.size();
 			break;
 		case "d":
-			if (x < 730 - obj.size())// 733-obj.size())
-				x += 4;
+			x += obj.getSpeed();
+			if (x > 733-obj.size())
+				x = 733-obj.size();
 			break;
 		}
 		obj.setPosition(new Point(x, y));
