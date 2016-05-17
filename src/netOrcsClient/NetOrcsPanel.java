@@ -52,8 +52,8 @@ public class NetOrcsPanel extends JPanel {
 	public synchronized void updateState(State s) {
 		this.state = s;
 		if (state.gameOver()) {
-			int response = JOptionPane.showConfirmDialog(null, "Player"
-					+ state.getLastHero().getIndex()
+			int response = JOptionPane.showConfirmDialog(null, 
+					state.getLastHero().getColor().toString()
 					+ " has won.\n Would you like to play again", "Game Over",
 					JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
 			if (response == JOptionPane.NO_OPTION) {

@@ -5,6 +5,7 @@
  */
 package netOrcsClient;
 
+import java.awt.BorderLayout;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.image.BufferedImage;
@@ -13,6 +14,8 @@ import java.io.IOException;
 
 import javax.imageio.ImageIO;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
 
 /**
  *
@@ -24,8 +27,8 @@ public class NetOrcsGame extends JFrame implements KeyListener {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private static final int WIDTH = 750;
-    private static final int HEIGHT = 750;
+	private static final int WIDTH = 850;
+    private static final int HEIGHT = 850;
     private NetOrcsConnection connection;
     static NetOrcsPanel panel;
 
@@ -38,6 +41,9 @@ public class NetOrcsGame extends JFrame implements KeyListener {
         this.addKeyListener(this);
         this.setVisible(true);
         this.add(panel);
+        JPanel leaderBoard = new JPanel();
+        leaderBoard.add(new JLabel("Leader Board"));
+        this.add(leaderBoard,BorderLayout.EAST);
         BufferedImage myImage = ImageIO.read(new File("src/objects/backgrounds/natalie2.jpg"));
         //this.setContentPane(new BackGroundPanel(myImage));
     }
