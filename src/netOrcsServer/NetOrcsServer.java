@@ -29,7 +29,7 @@ import netOrcsShared.State;
  */
 class NetOrcsServer {
 
-	int port;
+	int port = -1;
 	List<ConnectionHandler> handlers;
 	ServerSocket server;
 	HashSet<String> users = new HashSet<String>();
@@ -37,11 +37,19 @@ class NetOrcsServer {
 	int numPlayers = 0;
 	double chanceToSpawnOrc = 0.05;
 	List<Color> heroColors = new ArrayList<>();
+	int numReadyPlayers = 0;
 
 	// HashMap<Rectangle2D.Double, GameObjects> orcPosition = new HashMap<>();
 	public NetOrcsServer() {
 		this.handlers = Collections.synchronizedList(new ArrayList<ConnectionHandler>());
 		addHeroColor();
+		start();
+	}
+	public NetOrcsServer(int port) {
+		this.handlers = Collections.synchronizedList(new ArrayList<ConnectionHandler>());
+		addHeroColor();
+		this.port = port;
+		start();
 	}
 	private void addHeroColor() {
 		this.heroColors.add(Color.BLUE);
@@ -52,12 +60,47 @@ class NetOrcsServer {
 		this.heroColors.add(Color.PINK);
 	}
 	void start() {
+		
+     
+            try {
+            	if (port == -1){
+            		this.server = new ServerSocket(0);
+            		port = server.getLocalPort();
+            	}else{
+            		this.server = new ServerSocket(port);
+            	}
+                
+                System.out.println("NetOrcs server running at port: " + port);
+            } catch (Exception e) {
+                //e.printStackTrace();
+                return;
+            }
+
+            while (!server.isClosed()) {
+                try {
+                    Socket client = this.server.accept();
+                    int playerNumber = ++this.numPlayers;
+                    System.out.println("Player " + playerNumber + " connected");
+                    
+                    ConnectionHandler handler = new ConnectionHandler(this, client, "Player " + playerNumber);
+                    this.handlers.add(handler);
+                    Thread runner = new Thread(handler);
+                    runner.start();
+                } catch (Exception e) {
+                    //e.printStackTrace();
+                }
+            }
+        
+    }
+
+	void startTimer(){
 		Timer timer = new Timer();
 		timer.schedule(new TimerTask() {
 
 			@Override
 			public void run() {
 				try {
+					validate();
 					moveHeros();
 					addOrc();
 					moveOrcs();
@@ -69,38 +112,28 @@ class NetOrcsServer {
 
 			}
 		}, 0, 50);
-        while (true) {
-            try {
-                this.server = new ServerSocket(0);
-                port = server.getLocalPort();
-                System.out.println("NetOrcs server running at port: " + port);
-            } catch (Exception e) {
-                e.printStackTrace();
-                return;
-            }
-
-            while (true) {
-                try {
-                    Socket client = this.server.accept();
-                    int playerNumber = ++this.numPlayers;
-                    System.out.println("Player " + playerNumber + " connected");
-                    
-                    ConnectionHandler handler = new ConnectionHandler(this, client, "Player " + playerNumber);
-                    this.handlers.add(handler);
-                    Thread runner = new Thread(handler);
-                    runner.start();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-    }
-
-    void removeHandler(ConnectionHandler handler) {
+	}
+	
+    protected void validate() throws IOException {
+		if(state.gameOver()){
+			synchronized(handlers) {
+	    		for (ConnectionHandler handler : handlers) {
+	    			handler.close();
+	    		}
+	    	}
+			System.out.println("Game over, restarting server for a new game...");
+			server.close();
+			new NetOrcsServer(port);
+		}
+		
+	}
+	void removeHandler(ConnectionHandler handler) {
         handlers.remove(handler);
         Hero hero = handler.hero;
         hero.kill();
         state.killHero(hero);
+        numReadyPlayers--;
+        numPlayers--;
     }
 
     void broadcast() throws IOException {
@@ -112,6 +145,17 @@ class NetOrcsServer {
     }
 
     void handleAction(ConnectionHandler handler, String input) throws IOException {
+    	
+    	if (input.equals("ready")){
+    		numReadyPlayers++;
+    		System.out.println(handler.user + " has readied up! " + numReadyPlayers + "/" + numPlayers + " are ready!");
+    		if (numReadyPlayers == numPlayers){
+    			System.out.println("Game is starting! Avoid the orcs!");
+    			startTimer();
+    		}
+    		return;
+    	}
+    	
     	Hero hero = handler.hero;
     	String[] splitInput = input.split(" ");
     	String startStop = splitInput[0];
@@ -120,7 +164,8 @@ class NetOrcsServer {
         state.updateHero(hero, hero.getIndex());
         state.updateHero(handler.hero, handler.hero.getIndex());
     }
-    void moveHeros(){
+   
+	void moveHeros(){
     	for(GameObjects go : state.getHeroes()) {
     		Hero h = (Hero) go;
     		if (h.getUp()){

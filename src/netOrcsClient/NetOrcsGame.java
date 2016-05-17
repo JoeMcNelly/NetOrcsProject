@@ -31,14 +31,15 @@ public class NetOrcsGame extends JFrame implements KeyListener {
 
     NetOrcsGame(NetOrcsConnection conn) throws IOException {
         this.connection = conn;
-        panel = new NetOrcsPanel();
+        panel = new NetOrcsPanel(this);
         setTitle("Net Orcs!");
         setSize(WIDTH, HEIGHT);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.addKeyListener(this);
         this.setVisible(true);
         this.add(panel);
-        BufferedImage myImage = ImageIO.read(new File("src/objects/backgrounds/natalie2.jpg"));
+        new NetOrcsReadyFrame(this);
+        //BufferedImage myImage = ImageIO.read(new File("src/objects/backgrounds/natalie2.jpg"));
         //this.setContentPane(new BackGroundPanel(myImage));
     }
 
@@ -56,5 +57,21 @@ public class NetOrcsGame extends JFrame implements KeyListener {
     public void keyReleased(KeyEvent e) {
     	connection.sendAction("stop " + e.getKeyChar());
     }
+
+	public void close() throws IOException{
+		connection.close();
+		setVisible(false);
+		dispose();
+	}
+
+	public void fireAction(String action) {
+		connection.sendAction(action);
+	}
+	public String getIP(){
+		return connection.IP;
+	}
+	public String getPort(){
+		return connection.PORT;
+	}
 
 }

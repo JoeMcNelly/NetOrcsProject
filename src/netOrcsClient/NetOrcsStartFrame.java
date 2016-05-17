@@ -26,15 +26,17 @@ public class NetOrcsStartFrame extends JFrame {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-
-	public NetOrcsStartFrame() {
-        setTitle("Net Orcs");
+	
+	public NetOrcsStartFrame(String ip2, String port) {
+		setTitle("Net Orcs");
         setSize(250, 100);
         JButton button = new JButton("Connect");
         JPanel pan1 = new JPanel();
         JPanel pan2 = new JPanel();
         JTextField ip = new JTextField(9);
         JTextField prt = new JTextField(5);
+        ip.setText(ip2);
+        prt.setText(port);
         JLabel iplab = new JLabel("IP:");
         JLabel prtlab = new JLabel("Port:");
         pan1.add(iplab);
@@ -44,7 +46,8 @@ public class NetOrcsStartFrame extends JFrame {
         add(pan1, BorderLayout.WEST);
         add(pan2, BorderLayout.EAST);
         add(button, BorderLayout.SOUTH);
-        
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setVisible(true);
         ActionListener start = new ActionListener() {
 
             @Override
@@ -55,17 +58,23 @@ public class NetOrcsStartFrame extends JFrame {
                     setVisible(false);
                     dispose();
                     try {
-						NetOrcsGame game = new NetOrcsGame(conn);
+						new NetOrcsGame(conn);
 					} catch (IOException e1) {
 						// TODO Auto-generated catch block
 						e1.printStackTrace();
 					}
                 } else {
-                    NetOrcsErrorFrame error = new NetOrcsErrorFrame();
+                    new NetOrcsErrorFrame();
                 }
             }
         };
 
         button.addActionListener(start);
+	}
+	
+	public NetOrcsStartFrame() {
+       new NetOrcsStartFrame("", "");
     }
+
+	
 }

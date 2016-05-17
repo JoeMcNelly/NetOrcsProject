@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Rectangle2D;
+import java.io.IOException;
 
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
@@ -15,8 +16,10 @@ import netOrcsShared.State;
 public class NetOrcsPanel extends JPanel {
 	Graphics2D g2;
 	State state;
+	NetOrcsGame game;
 
-	public NetOrcsPanel() {
+	public NetOrcsPanel(NetOrcsGame netOrcsGame) {
+		this.game = netOrcsGame;
 	}
 
 	@Override
@@ -57,9 +60,21 @@ public class NetOrcsPanel extends JPanel {
 					+ " has won.\n Would you like to play again", "Game Over",
 					JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
 			if (response == JOptionPane.NO_OPTION) {
+				try {
+					game.close();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 				System.exit(0);
 			} else if (response == JOptionPane.YES_OPTION) {
-				System.out.println("Yes");
+				try {
+					game.close();
+					new NetOrcsStartFrame(game.getIP(), game.getPort());
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
 		} else {
 			repaint();

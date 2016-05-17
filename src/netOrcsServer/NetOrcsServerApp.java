@@ -15,8 +15,7 @@ public class NetOrcsServerApp {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        NetOrcsServer server = new NetOrcsServer();
-        server.start();
+        new NetOrcsServer();
     }
 
 }

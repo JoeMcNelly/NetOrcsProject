@@ -52,6 +52,7 @@ class ConnectionHandler implements Runnable {
                 server.handleAction(this, input);
             } catch (Exception ex) {
                 System.out.println(user + " has disconnected.");
+                //ex.printStackTrace();
                 try {
                     socket.close();
                     server.removeHandler(this);
@@ -72,5 +73,18 @@ class ConnectionHandler implements Runnable {
 		}
         
     }
+
+	public void close() {
+		try {
+			in.close();
+			out.close();
+			socket.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		
+	}
 
 }

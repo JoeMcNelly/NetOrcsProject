@@ -19,8 +19,8 @@ import netOrcsShared.State;
  */
 public class NetOrcsConnection {
 
-    private String IP = "";
-    private String PORT = "";
+    public String IP = "";
+    public String PORT = "";
     Socket socket;
     ObjectOutputStream out;
     ObjectInputStream in;
@@ -68,6 +68,7 @@ public class NetOrcsConnection {
                     try {
                         Object o = in.readObject();
                         state = (State) o;
+                        //System.out.println(state.gameOver());
                         NetOrcsGame.panel.updateState(state);
                         if(state.gameOver()){
                         	 break;
@@ -82,6 +83,9 @@ public class NetOrcsConnection {
         });
         t.start();
 
+    }
+    public void close() throws IOException{
+    	socket.close();
     }
 
 }

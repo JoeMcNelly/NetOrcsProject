@@ -41,7 +41,9 @@ public class State implements Serializable {
     public synchronized void removeOrc(Orc orc){
     	this.orcs.remove(orc);
     }
-    
+    public synchronized void removeAllOrcs(){
+    	orcs = new ArrayList<>();
+    }
 
     public synchronized List<GameObjects> getHeroes() {
         return this.heroes;
@@ -58,6 +60,7 @@ public class State implements Serializable {
     	this.lastHero = hero;
     	this.heroes.set(hero.getIndex(), hero);
     }
+
     public synchronized void updateHero(Hero hero, int index){
     	this.heroes.set(index, hero);
     }
@@ -70,7 +73,7 @@ public class State implements Serializable {
     		}
     	}
     	if(trueVals == heroes.size()){
-    		return true;
+    		return heroes.size() > 0;
     	}else {
     		return false;
     	}

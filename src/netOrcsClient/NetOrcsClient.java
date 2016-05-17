@@ -17,8 +17,6 @@ public class NetOrcsClient {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        JFrame frame = new NetOrcsStartFrame();
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setVisible(true);
+        new NetOrcsStartFrame();
     }
 }
