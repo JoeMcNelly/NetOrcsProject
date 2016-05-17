@@ -69,6 +69,9 @@ public class NetOrcsConnection {
                         Object o = in.readObject();
                         state = (State) o;
                         NetOrcsGame.panel.updateState(state);
+                        if(state.gameOver()){
+                        	 break;
+                        }
                     } catch (Exception e) {
                     	
                         System.err.println("Data received in unknown format");
