@@ -42,6 +42,7 @@ class NetOrcsServer {
 			@Override
 			public void run() {
 				try {
+					moveHeros();
 					addOrc();
 					moveOrcs();
 					broadcast();
@@ -95,12 +96,30 @@ class NetOrcsServer {
 
     void handleAction(ConnectionHandler handler, String input) throws IOException {
     	Hero hero = handler.hero;
-        hero = (Hero) tryAction(hero, input);
+    	String[] splitInput = input.split(" ");
+    	String startStop = splitInput[0];
+    	String direction = splitInput[1];
+    	hero.moving(startStop, direction);
         state.updateHero(hero, hero.getIndex());
         state.updateHero(handler.hero, handler.hero.getIndex());
-        //broadcast();
     }
-
+    void moveHeros(){
+    	for(GameObjects go : state.getHeroes()) {
+    		Hero h = (Hero) go;
+    		if (h.getUp()){
+    			tryAction(h,"w");
+    		}
+    		if(h.getDown()){
+    			tryAction(h,"s");
+    		}
+    		if(h.getRight()){
+    			tryAction(h,"d");
+    		}
+    		if(h.getLeft()){
+    			tryAction(h,"a");
+    		}
+    	}
+    }
 	protected void addOrc() {
 		Random rand = new Random();
 

@@ -44,16 +44,17 @@ public class NetOrcsGame extends JFrame implements KeyListener {
 
     @Override
     public void keyTyped(KeyEvent e) {
-        connection.sendAction("" + e.getKeyChar());
+        //connection.sendAction("" + e.getKeyChar());
     }
 
     @Override
     public void keyPressed(KeyEvent e) {
-
+    	connection.sendAction("start " + e.getKeyChar());
     }
 
     @Override
     public void keyReleased(KeyEvent e) {
+    	connection.sendAction("stop " + e.getKeyChar());
     }
 
 }

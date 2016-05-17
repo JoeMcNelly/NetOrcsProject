@@ -11,6 +11,10 @@ public class Hero extends GameObjects{
 	private int index;
 	private Point position;
 	public static final int SIZE = 10;
+	private boolean left = false;
+	private boolean right = false;
+	private boolean up = false;
+	private boolean down = false;
 	
 	public Hero(){
 		
@@ -32,5 +36,42 @@ public class Hero extends GameObjects{
 	@Override
 	public int size() {
 		return SIZE;
+	}
+	
+	public void moving (String startStop, String direction) {
+		boolean temp = false;
+		if (startStop.equals("start")){
+			temp = true;
+		}
+		
+		switch(direction){
+		case "w":
+			up=temp;
+			break;
+		case "a":
+			left=temp;
+			break;
+		case "s":
+			down=temp;
+			break;
+		case "d":
+			right=temp;
+			break;
+		default:
+			break;
+	}
+	}
+	
+	public boolean getUp(){
+		return up;
+	}
+	public boolean getDown(){
+		return down;
+	}
+	public boolean getRight(){
+		return right;
+	}
+	public boolean getLeft(){
+		return left;
 	}
 }
