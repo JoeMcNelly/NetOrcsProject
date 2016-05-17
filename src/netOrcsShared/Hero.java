@@ -16,9 +16,11 @@ public class Hero extends GameObjects{
 	private boolean right = false;
 	private boolean up = false;
 	private boolean down = false;
+	private static final int HERO_SPEED=2;
 	
 	public Hero(){
-		
+		super();
+		this.speed=HERO_SPEED;
 	}
 	
 	public int getIndex() {
@@ -85,5 +87,15 @@ public class Hero extends GameObjects{
 	public void setColor(Color color) {
 		this.color = color;
 		
+	}
+
+	@Override
+	public void setSpeed(int speed) {
+		this.speed=speed;
+	}
+
+	@Override
+	public int getSpeed() {
+		return this.speed;
 	}
 }
