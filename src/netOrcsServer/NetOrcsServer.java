@@ -37,9 +37,12 @@ class NetOrcsServer {
 	int numPlayers = 0;
 	double chanceToSpawnOrc = 0.05;
 	int angerDistance = 200;
+	int spawnDistance = 180;
 	List<Color> heroColors = new ArrayList<>();
 	int numReadyPlayers = 0;
 	Timer timer = new Timer();
+	long startTime;
+	long interval = 10000;
 	// HashMap<Rectangle2D.Double, GameObjects> orcPosition = new HashMap<>();
 	public NetOrcsServer() {
 		this.handlers = Collections.synchronizedList(new ArrayList<ConnectionHandler>());
@@ -97,27 +100,37 @@ class NetOrcsServer {
 
 	void startTimer(){
 
-		
+		startTime=System.currentTimeMillis();
 		timer.schedule(new TimerTask() {
 
 			@Override
 			public void run() {
 				try {
-					
 					validate();
 					moveHeros();
 					addOrc();
 					moveOrcs();
 					broadcast();
 					collisionDetectionAngerAndDirectionBias();
+					modifySpeeds();
 				} catch (IOException e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 
 			}
 		}, 0, 50);
 
+	}
+	
+	protected void modifySpeeds(){
+		long nowTime = System.currentTimeMillis();
+		long elapsedTime = nowTime-startTime;
+		if (elapsedTime > interval){
+			startTime=nowTime;
+			if (chanceToSpawnOrc < 0.50)
+				chanceToSpawnOrc += 0.03;
+		}
+		
 	}
 	
     protected void validate() throws IOException {
@@ -197,7 +210,19 @@ class NetOrcsServer {
 		if (rand.nextDouble() < this.chanceToSpawnOrc) {
 			Orc orc = new Orc();
 			int index = rand.nextInt();
-			Point p = new Point(rand.nextInt(750), rand.nextInt(750));
+			double dist = -1.0;
+			Point p = new Point(0, 0);
+			while (dist < spawnDistance) {
+				p = new Point(rand.nextInt(750), rand.nextInt(750));
+				for (GameObjects hero : state.getHeroes()) {
+					hero = (Hero) hero;
+					double xdiff = (p.getX() + orc.size() / 2) - (hero.getPosition().getX() + hero.size() / 2);
+					double ydiff = (p.getY() + orc.size() / 2) - (hero.getPosition().getY() + hero.size() / 2);
+					dist = Math.sqrt(Math.pow(xdiff, 2) + Math.pow(ydiff, 2));
+
+				}
+			}
+
 			orc.setIndex(index);
 			orc.setPosition(p);
 			if (rand.nextDouble() < 0.3) {
