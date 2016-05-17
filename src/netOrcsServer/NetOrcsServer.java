@@ -36,7 +36,7 @@ class NetOrcsServer {
 	State state = new State();
 	int numPlayers = 0;
 	double chanceToSpawnOrc = 0.05;
-	int angerDistance = 100;
+	int angerDistance = 200;
 	List<Color> heroColors = new ArrayList<>();
 
 	// HashMap<Rectangle2D.Double, GameObjects> orcPosition = new HashMap<>();
@@ -44,6 +44,7 @@ class NetOrcsServer {
 		this.handlers = Collections.synchronizedList(new ArrayList<ConnectionHandler>());
 		addHeroColor();
 	}
+
 	private void addHeroColor() {
 		this.heroColors.add(Color.BLUE);
 		this.heroColors.add(Color.BLACK);
@@ -52,6 +53,7 @@ class NetOrcsServer {
 		this.heroColors.add(Color.ORANGE);
 		this.heroColors.add(Color.PINK);
 	}
+
 	void start() {
 		Timer timer = new Timer();
 		timer.schedule(new TimerTask() {
@@ -63,7 +65,7 @@ class NetOrcsServer {
 					addOrc();
 					moveOrcs();
 					broadcast();
-					collisionDetection();
+					collisionDetectionAngerAndDirectionBias();
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -71,74 +73,76 @@ class NetOrcsServer {
 
 			}
 		}, 0, 50);
-        while (true) {
-            try {
-                this.server = new ServerSocket(0);
-                port = server.getLocalPort();
-                System.out.println("NetOrcs server running at port: " + port);
-            } catch (Exception e) {
-                e.printStackTrace();
-                return;
-            }
+		while (true) {
+			try {
+				this.server = new ServerSocket(0);
+				port = server.getLocalPort();
+				System.out.println("NetOrcs server running at port: " + port);
+			} catch (Exception e) {
+				e.printStackTrace();
+				return;
+			}
 
-            while (true) {
-                try {
-                    Socket client = this.server.accept();
-                    int playerNumber = ++this.numPlayers;
-                    System.out.println("Player " + playerNumber + " connected");
-                    
-                    ConnectionHandler handler = new ConnectionHandler(this, client, "Player " + playerNumber);
-                    this.handlers.add(handler);
-                    Thread runner = new Thread(handler);
-                    runner.start();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-    }
+			while (true) {
+				try {
+					Socket client = this.server.accept();
+					int playerNumber = ++this.numPlayers;
+					System.out.println("Player " + playerNumber + " connected");
 
-    void removeHandler(ConnectionHandler handler) {
-        handlers.remove(handler);
-        Hero hero = handler.hero;
-        hero.kill();
-        state.killHero(hero);
-    }
+					ConnectionHandler handler = new ConnectionHandler(this, client, "Player " + playerNumber);
+					this.handlers.add(handler);
+					Thread runner = new Thread(handler);
+					runner.start();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		}
+	}
 
-    void broadcast() throws IOException {
-    	synchronized(handlers) {
-    		for (ConnectionHandler handler : handlers) {
-    			handler.sendState();
-    		}
-    	}
-    }
+	void removeHandler(ConnectionHandler handler) {
+		handlers.remove(handler);
+		Hero hero = handler.hero;
+		hero.kill();
+		state.killHero(hero);
+	}
 
-    void handleAction(ConnectionHandler handler, String input) throws IOException {
-    	Hero hero = handler.hero;
-    	String[] splitInput = input.split(" ");
-    	String startStop = splitInput[0];
-    	String direction = splitInput[1];
-    	hero.moving(startStop, direction);
-        state.updateHero(hero, hero.getIndex());
-        state.updateHero(handler.hero, handler.hero.getIndex());
-    }
-    void moveHeros(){
-    	for(GameObjects go : state.getHeroes()) {
-    		Hero h = (Hero) go;
-    		if (h.getUp()){
-    			tryAction(h,"w");
-    		}
-    		if(h.getDown()){
-    			tryAction(h,"s");
-    		}
-    		if(h.getRight()){
-    			tryAction(h,"d");
-    		}
-    		if(h.getLeft()){
-    			tryAction(h,"a");
-    		}
-    	}
-    }
+	void broadcast() throws IOException {
+		synchronized (handlers) {
+			for (ConnectionHandler handler : handlers) {
+				handler.sendState();
+			}
+		}
+	}
+
+	void handleAction(ConnectionHandler handler, String input) throws IOException {
+		Hero hero = handler.hero;
+		String[] splitInput = input.split(" ");
+		String startStop = splitInput[0];
+		String direction = splitInput[1];
+		hero.moving(startStop, direction);
+		state.updateHero(hero, hero.getIndex());
+		state.updateHero(handler.hero, handler.hero.getIndex());
+	}
+
+	void moveHeros() {
+		for (GameObjects go : state.getHeroes()) {
+			Hero h = (Hero) go;
+			if (h.getUp()) {
+				tryAction(h, "w");
+			}
+			if (h.getDown()) {
+				tryAction(h, "s");
+			}
+			if (h.getRight()) {
+				tryAction(h, "d");
+			}
+			if (h.getLeft()) {
+				tryAction(h, "a");
+			}
+		}
+	}
+
 	protected void addOrc() {
 		Random rand = new Random();
 
@@ -148,13 +152,10 @@ class NetOrcsServer {
 			Point p = new Point(rand.nextInt(750), rand.nextInt(750));
 			orc.setIndex(index);
 			orc.setPosition(p);
-			if(rand.nextDouble() < 0.3) {
+			if (rand.nextDouble() < 0.3) {
 				orc.setAngry(true);
 			}
 			state.addOrc(orc);
-			
-			// this.orcPosition.put(new Rectangle2D.Double(p.getX(), p.getY(),
-			// p.getX() + orc.size(), p.getY() + orc.size()), orc);
 		}
 	}
 
@@ -162,63 +163,103 @@ class NetOrcsServer {
 		Random rand = new Random();
 		String direction = "";
 		for (GameObjects g : state.getOrcs()) {
-			if (rand.nextDouble() < 0.5) {
-				if (rand.nextDouble() < 0.5) {
-					direction = "w";
-				} else {
-					direction = "d";
+			Orc orc = (Orc) g;
+			//angry movement
+			if (orc.getAngry()) {
+				if (orc.getUp()) {
+					tryAction(orc, "w");
 				}
+				if (orc.getDown()) {
+					tryAction(orc, "s");
+				}
+				if (orc.getRight()) {
+					tryAction(orc, "d");
+				}
+				if (orc.getLeft()) {
+					tryAction(orc, "a");
+				}
+				
+			//random not angry
 			} else {
 				if (rand.nextDouble() < 0.5) {
-					direction = "a";
-				} else {
-					direction = "s";
+					if (rand.nextDouble() < 0.5) {
+						direction = "w";
+					} else {
+						direction = "d";
+					}
+					tryAction(g,direction);
+				}
+				if (rand.nextDouble() < 0.5) {
+					if (rand.nextDouble() < 0.5) {
+						direction = "a";
+					} else {
+						direction = "s";
+					}
+					tryAction(g,direction);
 				}
 			}
-			tryAction(g, direction);
-			// Point p = g.getPosition();
-			// this.orcPosition.put(new Rectangle2D.Double(p.getX(), p.getY(),
-			// p.getX() + g.size(), p.getY() + g.size()), g);
 		}
 
 	}
 
-	public void collisionDetection() {
+	public void collisionDetectionAngerAndDirectionBias() {
 		for (GameObjects go : state.getOrcs()) {
 			Orc orc = (Orc) go;
 			boolean angry = false;
+			double minDist = 750;
 			for (GameObjects hero : state.getHeroes()) {
 				double heroRightX = hero.getPosition().getX() + hero.size();
 				double heroBottomY = hero.getPosition().getY() + hero.size();
 				double heroLeftX = hero.getPosition().getX();
 				double heroTopY = hero.getPosition().getY();
-			
 
-//				double orcX = orc.getPosition().getX() + orc.size() / 2;
-//				double orcY = orc.getPosition().getY() + orc.size() / 2;
-
-//				if (heroLeftX <= orcX && heroRightX >= orcX) {
-//					if (heroTopY <= orcY && heroBottomY >= orcY) {
-//						state.killHero((Hero) hero);
-//					}
-//				}
-
-				if(collided(heroLeftX,heroRightX,heroTopY,heroBottomY,orc.getPosition().getX(),orc.getPosition().getY()) ||
-					collided(heroLeftX,heroRightX,heroTopY,heroBottomY,orc.getPosition().getX()+orc.size(),orc.getPosition().getY()) ||
-					collided(heroLeftX,heroRightX,heroTopY,heroBottomY, orc.getPosition().getX(),orc.getPosition().getY()+orc.size()) ||
-					collided(heroLeftX,heroRightX,heroTopY,heroBottomY, orc.getPosition().getX()+orc.size(),orc.getPosition().getY()+orc.size())){
-						state.killHero((Hero) hero);
+				if (collided(heroLeftX, heroRightX, heroTopY, heroBottomY, orc.getPosition().getX(),
+						orc.getPosition().getY())
+						|| collided(heroLeftX, heroRightX, heroTopY, heroBottomY, orc.getPosition().getX() + orc.size(),
+								orc.getPosition().getY())
+						|| collided(heroLeftX, heroRightX, heroTopY, heroBottomY, orc.getPosition().getX(),
+								orc.getPosition().getY() + orc.size())
+						|| collided(heroLeftX, heroRightX, heroTopY, heroBottomY, orc.getPosition().getX() + orc.size(),
+								orc.getPosition().getY() + orc.size())) {
+					state.killHero((Hero) hero);
 				}
-				double xdiff = (orc.getPosition().getX() + orc.size() / 2) - (hero.getPosition().getX() + hero.size() / 2);
-				double ydiff = (orc.getPosition().getY() + orc.size() / 2) - (hero.getPosition().getY() + hero.size() / 2);
-				angry = angry || (Math.sqrt(Math.pow(xdiff,2) + Math.pow(ydiff,2)) < this.angerDistance && hero.isAlive());
+				double xdiff = (orc.getPosition().getX() + orc.size() / 2)
+						- (hero.getPosition().getX() + hero.size() / 2);
+				double ydiff = (orc.getPosition().getY() + orc.size() / 2)
+						- (hero.getPosition().getY() + hero.size() / 2);
+				double dist = Math.sqrt(Math.pow(xdiff, 2) + Math.pow(ydiff, 2));
+				boolean close = dist < this.angerDistance && hero.isAlive();
+
+				if (close && dist < minDist) {
+					minDist = dist;
+					if (xdiff > 0) {
+						//bias left
+						orc.moving("start", "a");
+						orc.moving("stop", "d");
+					} else {
+						// bias right
+						orc.moving("stop", "a");
+						orc.moving("start", "d");
+					}
+					if (ydiff > 0) {
+						// bias up
+						orc.moving("start", "w");
+						orc.moving("stop", "s");
+					} else {
+						// bias down
+						orc.moving("start", "s");
+						orc.moving("stop", "w");
+					}
+				}
+				angry = angry || close;
 			}
 			orc.setAngry(angry);
 
 		}
 	}
-	
-	public boolean collided(double heroLeftX, double heroRightX, double heroTopY, double heroBottomY, double orcX, double orcY) {
+
+	public boolean collided(double heroLeftX, double heroRightX, double heroTopY, double heroBottomY, double orcX,
+			double orcY) {
 		if (heroLeftX <= orcX && heroRightX >= orcX) {
 			if (heroTopY <= orcY && heroBottomY >= orcY) {
 				return true;
@@ -226,8 +267,6 @@ class NetOrcsServer {
 		}
 		return false;
 	}
-	
-	
 
 	private GameObjects tryAction(GameObjects obj, String input) {
 		Point pos = obj.getPosition();
@@ -241,18 +280,18 @@ class NetOrcsServer {
 			break;
 		case "a":
 			x -= obj.getSpeed();
-			if (x< 0)
+			if (x < 0)
 				x = 0;
 			break;
 		case "s":
 			y += obj.getSpeed();
-			if (y >711-obj.size())
-				y = 711-obj.size();
+			if (y > 711 - obj.size())
+				y = 711 - obj.size();
 			break;
 		case "d":
 			x += obj.getSpeed();
-			if (x > 733-obj.size())
-				x = 733-obj.size();
+			if (x > 733 - obj.size())
+				x = 733 - obj.size();
 			break;
 		}
 		obj.setPosition(new Point(x, y));

@@ -13,7 +13,7 @@ public class Orc extends GameObjects{
 	public static final int SIZE = 10;
 	private boolean angry=false;
 	private static final int NORMAL_ORC_SPEED=2;
-	private static final int ANGRY_ORC_SPEED=10;
+	private static final int ANGRY_ORC_SPEED=2;
 	public Orc(){
 		super();
 		this.speed=NORMAL_ORC_SPEED;

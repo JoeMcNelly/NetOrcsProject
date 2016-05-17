@@ -27,11 +27,11 @@ public class NetOrcsGame extends JFrame implements KeyListener {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private static final int WIDTH = 850;
-    private static final int HEIGHT = 850;
+	private static final int WIDTH = 750;
+    private static final int HEIGHT = 750;
     private NetOrcsConnection connection;
     static NetOrcsPanel panel;
-    static HeroLeaderBoardPanel leaderBoard;
+    //static HeroLeaderBoardPanel leaderBoard;
 
     NetOrcsGame(NetOrcsConnection conn) throws IOException {
         this.connection = conn;
@@ -42,8 +42,8 @@ public class NetOrcsGame extends JFrame implements KeyListener {
         this.addKeyListener(this);
         this.setVisible(true);
         this.add(panel);
-        leaderBoard = new HeroLeaderBoardPanel();
-        this.add(leaderBoard,BorderLayout.EAST);
+        //leaderBoard = new HeroLeaderBoardPanel();
+        //this.add(leaderBoard,BorderLayout.EAST);
         BufferedImage myImage = ImageIO.read(new File("src/objects/backgrounds/natalie2.jpg"));
         //this.setContentPane(new BackGroundPanel(myImage));
     }

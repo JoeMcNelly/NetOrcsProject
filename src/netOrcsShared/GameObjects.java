@@ -7,9 +7,13 @@ import java.io.Serializable;
 public abstract class GameObjects implements Serializable{
 	
 	private boolean isAlive = true;
-	int speed;
-	Color color;
-	private long timeAlive;
+	protected int speed;
+	protected Color color;
+	protected boolean left = false;
+	protected boolean right = false;
+	protected boolean up = false;
+	protected boolean down = false;
+	protected long timeAlive;
 	abstract public Point getPosition();
 	abstract public void setPosition(Point position);
 	abstract public int getIndex();
@@ -33,5 +37,41 @@ public abstract class GameObjects implements Serializable{
 	}
 	public boolean isAlive(){
 		return isAlive;
+	}
+	
+	public boolean getUp(){
+		return up;
+	}
+	public boolean getDown(){
+		return down;
+	}
+	public boolean getRight(){
+		return right;
+	}
+	public boolean getLeft(){
+		return left;
+	}
+	public void moving (String startStop, String direction) {
+		boolean temp = false;
+		if (startStop.equals("start")){
+			temp = true;
+		}
+		
+		switch(direction){
+		case "w":
+			up=temp;
+			break;
+		case "a":
+			left=temp;
+			break;
+		case "s":
+			down=temp;
+			break;
+		case "d":
+			right=temp;
+			break;
+		default:
+			break;
+		}
 	}
 }
