@@ -3,14 +3,13 @@ package netOrcsShared;
 import java.awt.Color;
 import java.awt.Point;
 import java.io.Serializable;
-import java.sql.Time;
 
 public abstract class GameObjects implements Serializable{
 	
 	private boolean isAlive = true;
 	int speed;
 	Color color;
-	private Time timeAlive;
+	private long timeAlive;
 	abstract public Point getPosition();
 	abstract public void setPosition(Point position);
 	abstract public int getIndex();
@@ -20,10 +19,10 @@ public abstract class GameObjects implements Serializable{
 	abstract public void setColor(Color color);
 	abstract public void setSpeed(int speed);
 	abstract public int getSpeed();
-	public void setTimeAlive(Time time){
+	public void setTimeAlive(long time){
 		this.timeAlive = time;
 	}
-	public Time getTime(){
+	public long getTime(){
 		return this.timeAlive;
 	}
 	public GameObjects(){
