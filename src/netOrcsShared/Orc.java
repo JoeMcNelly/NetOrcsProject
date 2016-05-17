@@ -17,11 +17,7 @@ public class Orc extends GameObjects{
 	public Orc(){
 		super();
 		this.speed=NORMAL_ORC_SPEED;
-	}
-	public Orc(boolean angry){
-		if (angry) {
-			this.speed=ANGRY_ORC_SPEED;
-		}
+		this.color=Color.GREEN;
 	}
 	
 	public Point getPosition() {
@@ -66,5 +62,10 @@ public class Orc extends GameObjects{
 	
 	public void setAngry(boolean angry) {
 		this.angry=angry;
+		if(this.angry){
+			this.color=Color.GREEN;
+		}else {
+			this.color=Color.RED;
+		}
 	}
 }
