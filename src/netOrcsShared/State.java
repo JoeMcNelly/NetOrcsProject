@@ -7,6 +7,7 @@ package netOrcsShared;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -21,7 +22,12 @@ public class State implements Serializable {
 	private static final long serialVersionUID = -3807319663566387642L;
 	private List<GameObjects> orcs = new ArrayList<>();
 	private GameObjects lastHero;
+	private List<GameObjects> heroes;
+	public State() {
 
+	    
+		 heroes = Collections.synchronizedList(new ArrayList<GameObjects>());
+	}
     public synchronized List<GameObjects> getOrcs() {
         return this.orcs;
     }
@@ -36,8 +42,6 @@ public class State implements Serializable {
     	this.orcs.remove(orc);
     }
     
-    
-	private List<GameObjects> heroes = new ArrayList<>();
 
     public synchronized List<GameObjects> getHeroes() {
         return this.heroes;
@@ -58,7 +62,7 @@ public class State implements Serializable {
     	this.heroes.set(index, hero);
     }
     
-    public boolean gameOver(){
+    public synchronized boolean gameOver(){
     	int trueVals = 0;
     	for(GameObjects hero : heroes){
     		if(!hero.isAlive()){
@@ -72,7 +76,7 @@ public class State implements Serializable {
     	}
     }
     
-    public GameObjects getLastHero(){
+    public synchronized GameObjects getLastHero(){
     	return lastHero;
     }
     
