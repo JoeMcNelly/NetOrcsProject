@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -30,7 +31,7 @@ import netOrcsShared.State;
 class NetOrcsServer {
 
 	int port;
-	List<ConnectionHandler> handlers = new ArrayList<ConnectionHandler>();
+	List<ConnectionHandler> handlers;
 	ServerSocket server;
 	HashSet<String> users = new HashSet<String>();
 	State state = new State();
@@ -38,7 +39,9 @@ class NetOrcsServer {
 	double chanceToSpawnOrc = 0.05;
 
 	// HashMap<Rectangle2D.Double, GameObjects> orcPosition = new HashMap<>();
-
+	public NetOrcsServer() {
+		this.handlers = Collections.synchronizedList(new ArrayList<ConnectionHandler>());
+	}
 	void start() {
 		Timer timer = new Timer();
 		timer.schedule(new TimerTask() {
@@ -92,9 +95,9 @@ class NetOrcsServer {
     }
 
     void broadcast() throws IOException {
-        for (ConnectionHandler handler : handlers) {
-            handler.sendState();
-        }
+    		for (ConnectionHandler handler : handlers) {
+    			handler.sendState();
+    		}
     }
 
     void handleAction(ConnectionHandler handler, String input) throws IOException {
