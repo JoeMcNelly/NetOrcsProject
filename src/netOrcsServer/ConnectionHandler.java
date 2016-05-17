@@ -37,7 +37,7 @@ class ConnectionHandler implements Runnable {
         hero = new Hero();
         hero.setIndex(index);
         hero.setPosition(new Point((int)Math.floor(750/2), (int)Math.floor(750/2)));
-        hero.setColor(server.heroColors.get(index  % server.numPlayers));
+        hero.setColor(server.heroColors.get(index  % server.heroColors.size()));
         this.server.state.addhero(hero);
         
     }
