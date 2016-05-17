@@ -29,7 +29,7 @@ public class NetOrcsPanel extends JPanel {
 					Ellipse2D.Double eOrc = new Ellipse2D.Double(orc
 							.getPosition().getX(), orc.getPosition().getY(),
 							orc.size(), orc.size());
-					g2.setColor(Color.GREEN);
+					g2.setColor(orc.getColor());
 					g2.fill(eOrc);
 					g2.draw(eOrc);
 

@@ -16,7 +16,7 @@ public class Hero extends GameObjects{
 	private boolean right = false;
 	private boolean up = false;
 	private boolean down = false;
-	private static final int HERO_SPEED=2;
+	private static final int HERO_SPEED=4;
 	
 	public Hero(){
 		super();
