@@ -43,6 +43,7 @@ class NetOrcsServer {
 			public void run() {
 				try {
 					addOrc();
+					moveOrcs();
 					broadcast();
 				} catch (IOException e) {
 					// TODO Auto-generated catch block
@@ -112,6 +113,31 @@ class NetOrcsServer {
 			state.addOrc(orc);
 		}
 	}
+	
+	private void moveOrcs() {
+		Random rand = new Random();
+		String direction = "";
+		for (GameObjects g : state.getOrcs()) {
+		if (rand.nextDouble() < 0.5) {
+			if (rand.nextDouble() < 0.5) {
+				direction="w";
+			} else {
+				direction="d";
+			}
+		}
+		else {
+			if (rand.nextDouble() < 0.5){
+				direction="a";
+			} else {
+				direction="s";
+			}
+		}
+		tryAction(g,direction);
+		}
+		
+	
+	}
+	
     private GameObjects tryAction(GameObjects obj, String input) {
     	Point pos = obj.getPosition();
     	int x = (int)pos.getX();
@@ -119,19 +145,19 @@ class NetOrcsServer {
 		switch(input){
 			case "w":
 				if (y > 0)
-					y--;
+					y-=4;
 				break;
 			case "a":
 				if (x > 0)
-				x--;
+				x-=4;
 				break;
 			case "s":
-				if (y < 711-obj.size())
-					y++;
+				if (y < 708-obj.size())//711-obj.size())
+					y+=4;
 				break;
 			case "d":
-				if (x < 733-obj.size())
-					x++;
+				if (x < 730 - obj.size())//733-obj.size())
+					x+=4;
 				break;
 		}
 		obj.setPosition(new Point(x,y));
