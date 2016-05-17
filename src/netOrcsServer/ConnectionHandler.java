@@ -33,9 +33,11 @@ class ConnectionHandler implements Runnable {
         this.server = server;
         this.socket = socket;
         this.user = user;
+        int index = server.numPlayers - 1;
         hero = new Hero();
-        hero.setIndex(server.numPlayers - 1);
+        hero.setIndex(index);
         hero.setPosition(new Point((int)Math.floor(750/2), (int)Math.floor(750/2)));
+        hero.setColor(server.heroColors.get(index  % server.numPlayers));
         this.server.state.addhero(hero);
         
     }

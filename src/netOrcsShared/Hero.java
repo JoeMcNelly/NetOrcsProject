@@ -1,5 +1,6 @@
 package netOrcsShared;
 
+import java.awt.Color;
 import java.awt.Point;
 
 public class Hero extends GameObjects{
@@ -73,5 +74,16 @@ public class Hero extends GameObjects{
 	}
 	public boolean getLeft(){
 		return left;
+	}
+
+	@Override
+	public Color getColor() {
+		return this.color;
+	}
+
+	@Override
+	public void setColor(Color color) {
+		this.color = color;
+		
 	}
 }

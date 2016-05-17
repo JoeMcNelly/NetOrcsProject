@@ -5,14 +5,13 @@
  */
 package netOrcsServer;
 
+import java.awt.Color;
 import java.awt.Point;
-import java.awt.geom.Rectangle2D;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
@@ -37,10 +36,20 @@ class NetOrcsServer {
 	State state = new State();
 	int numPlayers = 0;
 	double chanceToSpawnOrc = 0.05;
+	List<Color> heroColors = new ArrayList<>();
 
 	// HashMap<Rectangle2D.Double, GameObjects> orcPosition = new HashMap<>();
 	public NetOrcsServer() {
 		this.handlers = Collections.synchronizedList(new ArrayList<ConnectionHandler>());
+		addHeroColor();
+	}
+	private void addHeroColor() {
+		this.heroColors.add(Color.BLUE);
+		this.heroColors.add(Color.BLACK);
+		this.heroColors.add(Color.CYAN);
+		this.heroColors.add(Color.MAGENTA);
+		this.heroColors.add(Color.ORANGE);
+		this.heroColors.add(Color.PINK);
 	}
 	void start() {
 		Timer timer = new Timer();

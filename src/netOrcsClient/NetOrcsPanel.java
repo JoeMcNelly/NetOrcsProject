@@ -40,7 +40,7 @@ public class NetOrcsPanel extends JPanel {
 					Rectangle2D.Double ehero = new Rectangle2D.Double(hero
 							.getPosition().getX(), hero.getPosition().getY(),
 							hero.size(), hero.size());
-					g2.setColor(Color.BLUE);
+					g2.setColor(hero.getColor());
 					g2.fill(ehero);
 					g2.draw(ehero);
 				}

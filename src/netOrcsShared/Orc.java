@@ -1,7 +1,7 @@
 package netOrcsShared;
 
+import java.awt.Color;
 import java.awt.Point;
-import java.io.Serializable;
 
 public class Orc extends GameObjects{
 	/**
@@ -31,5 +31,15 @@ public class Orc extends GameObjects{
 	@Override
 	public int size() {
 		return SIZE;
+	}
+	@Override
+	public Color getColor() {
+		
+		return color;
+	}
+	@Override
+	public void setColor(Color color) {
+		this.color = color;
+		
 	}
 }
