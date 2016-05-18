@@ -25,7 +25,7 @@ public class HeroLeaderBoardPanel extends JPanel {
 	public synchronized void updateState(State s) {
 		for(GameObjects hero : s.getHeroes()){
 			if(!hero.isAlive() && !this.deadHeros.contains(hero.getIndex())){
-				this.add(new JLabel(hero.getPlayerValue() + " lasted " + hero.getTime()));
+				this.add(new JLabel(hero.getPlayerValue() + ": " + hero.getTime()));
 				this.deadHeros.add(hero.getIndex());
 				this.validate();
 				this.repaint();

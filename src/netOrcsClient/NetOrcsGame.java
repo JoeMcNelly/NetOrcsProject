@@ -22,7 +22,7 @@ public class NetOrcsGame extends JFrame implements KeyListener {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private static final int WIDTH = 850;
+	private static final int WIDTH = 860;
     private static final int HEIGHT = 750;
     private NetOrcsConnection connection;
     static NetOrcsPanel panel;
