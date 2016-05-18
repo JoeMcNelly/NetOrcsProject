@@ -1,12 +1,10 @@
 package netOrcsClient;
 
-import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Rectangle2D;
 import java.io.IOException;
 
-import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
@@ -56,7 +54,7 @@ public class NetOrcsPanel extends JPanel {
 		this.state = s;
 		if (state.gameOver()) {
 			int response = JOptionPane.showConfirmDialog(null, 
-					state.getLastHero().getColor().toString()
+					state.getLastHero().getPlayerValue()
 					+ " has won.\n Would you like to play again", "Game Over",
 					JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
 			if (response == JOptionPane.NO_OPTION) {

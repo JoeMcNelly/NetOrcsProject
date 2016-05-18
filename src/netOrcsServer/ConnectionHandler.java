@@ -5,10 +5,12 @@
  */
 package netOrcsServer;
 
+import java.awt.Color;
 import java.awt.Point;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.lang.reflect.Field;
 import java.net.Socket;
 
 import netOrcsShared.Hero;
@@ -26,7 +28,7 @@ class ConnectionHandler implements Runnable {
     String user;
     Hero hero;
 
-    ConnectionHandler(NetOrcsServer server, Socket socket, String user) throws IOException {
+    ConnectionHandler(NetOrcsServer server, Socket socket, String user) throws IOException, NoSuchFieldException, SecurityException, ClassNotFoundException, IllegalArgumentException, IllegalAccessException {
         out = new ObjectOutputStream(socket.getOutputStream());
         out.flush();
         in = new ObjectInputStream(socket.getInputStream());
@@ -37,7 +39,10 @@ class ConnectionHandler implements Runnable {
         hero = new Hero();
         hero.setIndex(index);
         hero.setPosition(new Point((int)Math.floor(750/2), (int)Math.floor(750/2)));
-        hero.setColor(server.heroColors.get(index  % server.heroColors.size()));
+        Field field = Class.forName("java.awt.Color").getField(server.heroColors.get(index  % server.heroColors.size()));
+        Color color = (Color)field.get(null);
+        hero.setColor(color);
+        hero.setPlayerValue(server.heroColors.get(index  % server.heroColors.size()));
         this.server.state.addhero(hero);
         
     }

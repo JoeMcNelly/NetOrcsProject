@@ -5,7 +5,6 @@
  */
 package netOrcsClient;
 
-import javax.swing.JFrame;
 
 /**
  *

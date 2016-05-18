@@ -58,4 +58,6 @@ public class Hero extends GameObjects{
 	public int getSpeed() {
 		return this.speed;
 	}
+
+	
 }

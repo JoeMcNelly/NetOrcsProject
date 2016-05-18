@@ -14,6 +14,7 @@ public abstract class GameObjects implements Serializable{
 	protected boolean up = false;
 	protected boolean down = false;
 	protected long timeAlive;
+	private String playerValue;
 	abstract public Point getPosition();
 	abstract public void setPosition(Point position);
 	abstract public int getIndex();
@@ -23,6 +24,14 @@ public abstract class GameObjects implements Serializable{
 	abstract public void setColor(Color color);
 	abstract public void setSpeed(int speed);
 	abstract public int getSpeed();
+	
+	public void setPlayerValue(String color) {
+		this.playerValue = color;
+		
+	}
+	public String getPlayerValue(){
+		return this.playerValue;
+	}
 	public void setTimeAlive(long time){
 		this.timeAlive = time;
 	}

@@ -5,7 +5,6 @@
  */
 package netOrcsServer;
 
-import java.awt.Color;
 import java.awt.Point;
 import java.io.IOException;
 import java.net.ServerSocket;
@@ -38,7 +37,7 @@ class NetOrcsServer {
 	double chanceToSpawnOrc = 0.05;
 	int angerDistance = 200;
 	int spawnDistance = 180;
-	List<Color> heroColors = new ArrayList<>();
+	List<String> heroColors = new ArrayList<>();
 	int numReadyPlayers = 0;
 	Timer timer = new Timer();
 	long startTime;
@@ -57,12 +56,12 @@ class NetOrcsServer {
 	}
 
 	private void addHeroColor() {
-		this.heroColors.add(Color.BLUE);
-		this.heroColors.add(Color.BLACK);
-		this.heroColors.add(Color.CYAN);
-		this.heroColors.add(Color.MAGENTA);
-		this.heroColors.add(Color.ORANGE);
-		this.heroColors.add(Color.PINK);
+		this.heroColors.add("blue");
+		this.heroColors.add("black");
+		this.heroColors.add("cyan");
+		this.heroColors.add("magenta");
+		this.heroColors.add("orange");
+		this.heroColors.add("pink");
 	}
 
 	void start() {
