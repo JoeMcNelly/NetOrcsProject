@@ -213,13 +213,19 @@ class NetOrcsServer {
 			Point p = new Point(0, 0);
 			while (dist < spawnDistance) {
 				p = new Point(rand.nextInt(750), rand.nextInt(750));
+				double tempDist=0;
+				double minDist=750;
 				for (GameObjects hero : state.getHeroes()) {
 					hero = (Hero) hero;
 					double xdiff = (p.getX() + orc.size() / 2) - (hero.getPosition().getX() + hero.size() / 2);
 					double ydiff = (p.getY() + orc.size() / 2) - (hero.getPosition().getY() + hero.size() / 2);
-					dist = Math.sqrt(Math.pow(xdiff, 2) + Math.pow(ydiff, 2));
+					tempDist = Math.sqrt(Math.pow(xdiff, 2) + Math.pow(ydiff, 2));
+					if(tempDist<minDist){
+						minDist=tempDist;
+					}
 
 				}
+				dist=minDist;
 			}
 
 			orc.setIndex(index);
