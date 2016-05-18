@@ -69,8 +69,9 @@ public class NetOrcsConnection {
                         Object o = in.readObject();
                         state = (State) o;
                         //System.out.println(state.gameOver());
+                        NetOrcsGame.leaderBoard.updateState(state);
                         NetOrcsGame.panel.updateState(state);
-                        //NetOrcsGame.leaderBoard.updateState(state);
+                        
                         if(state.gameOver()){
                         	 break;
                         }

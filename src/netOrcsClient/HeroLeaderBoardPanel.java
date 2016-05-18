@@ -1,6 +1,8 @@
 package netOrcsClient;
 
 import java.awt.Graphics2D;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -10,28 +12,26 @@ import netOrcsShared.State;
 
 public class HeroLeaderBoardPanel extends JPanel {
 	Graphics2D g2;
-	State state;
+	List<Integer> deadHeros;
 	
 	
 	public HeroLeaderBoardPanel() {
 		super();
-		this.add(new JLabel("Leader Board"));
-	}
-	@Override
-	protected void paintComponent(java.awt.Graphics g) {
-		if(this.state != null){
-			for(GameObjects hero : this.state.getHeroes()){
-				if(!hero.isAlive()){
-					this.add(new JLabel(hero.getColor() + ": " + hero.getTime()));
-				}
-			}
-		}
+//		this.setSize(50, 750);
+		deadHeros = new ArrayList<>();
+		this.add(new JLabel("Leaderboard"));
 	}
 	
 	public synchronized void updateState(State s) {
-		System.out.println(s.getHeroes());
-		this.state = s;
-		this.repaint();
+		for(GameObjects hero : s.getHeroes()){
+			if(!hero.isAlive() && !this.deadHeros.contains(hero.getIndex())){
+				this.add(new JLabel(hero.getPlayerValue() + " lasted " + hero.getTime()));
+				this.deadHeros.add(hero.getIndex());
+				this.validate();
+				this.repaint();
+			}
+		}
+		
 		
 		
 	}

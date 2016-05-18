@@ -41,6 +41,7 @@ class NetOrcsServer {
 	int numReadyPlayers = 0;
 	Timer timer = new Timer();
 	long startTime;
+	long timeAlive;
 	long interval = 10000;
 	// HashMap<Rectangle2D.Double, GameObjects> orcPosition = new HashMap<>();
 	public NetOrcsServer() {
@@ -65,7 +66,7 @@ class NetOrcsServer {
 	}
 
 	void start() {
-     
+		timeAlive=System.currentTimeMillis();
             try {
             	if (port == -1){
             		this.server = new ServerSocket(0);
@@ -85,7 +86,6 @@ class NetOrcsServer {
                     Socket client = this.server.accept();
                     int playerNumber = ++this.numPlayers;
                     System.out.println("Player " + playerNumber + " connected");
-                    
                     ConnectionHandler handler = new ConnectionHandler(this, client, "Player " + playerNumber);
                     this.handlers.add(handler);
                     Thread runner = new Thread(handler);
@@ -293,6 +293,8 @@ class NetOrcsServer {
 								orc.getPosition().getY() + orc.size())
 						|| collided(heroLeftX, heroRightX, heroTopY, heroBottomY, orc.getPosition().getX() + orc.size(),
 								orc.getPosition().getY() + orc.size())) {
+					long timeDied = (System.currentTimeMillis() - timeAlive) / 1000;
+					hero.setTimeAlive(timeDied);
 					state.killHero((Hero) hero);
 				}
 				double xdiff = (orc.getPosition().getX() + orc.size() / 2)

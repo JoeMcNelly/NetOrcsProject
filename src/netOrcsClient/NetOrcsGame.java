@@ -5,6 +5,7 @@
  */
 package netOrcsClient;
 
+import java.awt.BorderLayout;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.io.IOException;
@@ -21,21 +22,23 @@ public class NetOrcsGame extends JFrame implements KeyListener {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private static final int WIDTH = 750;
+	private static final int WIDTH = 850;
     private static final int HEIGHT = 750;
     private NetOrcsConnection connection;
     static NetOrcsPanel panel;
-    //static HeroLeaderBoardPanel leaderBoard;
+    static HeroLeaderBoardPanel leaderBoard;
 
     NetOrcsGame(NetOrcsConnection conn) throws IOException {
         this.connection = conn;
         panel = new NetOrcsPanel(this);
+        leaderBoard = new HeroLeaderBoardPanel();
         setTitle("Net Orcs!");
         setSize(WIDTH, HEIGHT);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.addKeyListener(this);
         this.setVisible(true);
         this.add(panel);
+        this.add(leaderBoard, BorderLayout.EAST);
         new NetOrcsReadyFrame(this);
         //BufferedImage myImage = ImageIO.read(new File("src/objects/backgrounds/natalie2.jpg"));
 
